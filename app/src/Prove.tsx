@@ -11,6 +11,7 @@ const makeProof = async (_proofInput: any, _wasm: string, _zkey: string) => {
 	console.log("Making proof")
 	const { proof, publicSignals } = await snarkjs.groth16.fullProve(_proofInput, _wasm, _zkey);
 	console.log("Proof made")
+	console.log("publicSignals", publicSignals);
 	return { proof, publicSignals };
 };
 
@@ -22,8 +23,8 @@ function Prove() {
 	const [redactedJson, setRedactedJson] = useState("");
     const [redactMap, setRedactMap] = useState<Array<number>>(Array(MAX_JSON_SIZE).fill(1));
 
-	let wasmFile = "http://localhost:8000/redactString.wasm";
-	let zkeyFile = "http://localhost:8000/circuit_final.zkey";
+	let wasmFile = "http://localhost:8000/redactString25.wasm";
+	let zkeyFile = "http://localhost:8000/circuit_final25.zkey";
 
 	const chooseRedaction = () => {
 		let _redactMap = redactMap;
@@ -35,13 +36,14 @@ function Prove() {
 
 
         let proofInput = JSON.parse(inputJson);
-        console.log("Proof input", proofInput);
 		
         // We build redact map from the input json.
         let jsonArray = proofInput.json;
 		chooseRedaction();
 
-        proofInput["redact_map"] = redactMap;
+        proofInput["redactMap"] = redactMap;
+		console.log("Proof input", proofInput);
+
 
 		makeProof(proofInput, wasmFile, zkeyFile).then(({ proof: _proof, publicSignals: _signals }) => {
 			setProof(JSON.stringify(_proof, null, 2));
@@ -50,6 +52,7 @@ function Prove() {
 	};
 
 	useEffect(() => {		
+		console.log("Signals", signals);
 		setRedactedJson(signalsArrayToJSON(signals));
 	}, [signals]);
 
