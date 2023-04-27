@@ -5,6 +5,8 @@ app/src/zkproof/*.r1cs.json
 app/src/zkproof/challenge_phase* 
 app/src/zkproof/response_phase* 
 app/src/zkproof/*.wtns
+app/src/zkproof/challenge*
+app/src/zkproof/response*
 
 # dependencies
 /node_modules
