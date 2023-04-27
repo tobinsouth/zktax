@@ -1,3 +1,43 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Custom Styles */
+
+/* Paragraph styles */
+p {
+  @apply text-lg text-gray-800 leading-normal;
+}
+
+/* Button styles */
+button {
+  @apply px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md transition-colors duration-300 ease-in-out;
+}
+
+/* Textarea styles */
+textarea {
+  @apply block w-full px-4 py-2 text-gray-700 border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring-blue-500;
+}
+
+/* File input styles */
+input[type="file"] {
+  @apply appearance-none block w-full px-4 py-2 text-gray-700 border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring-blue-500;
+}
+
+/* Optional additional utility classes */
+/* Uncomment the lines below if you want to use additional Tailwind utility classes */
+
+/*
+.button-primary {
+  @apply bg-blue-500 hover:bg-blue-600;
+}
+
+.button-secondary {
+  @apply bg-gray-300 hover:bg-gray-400;
+}
+*/
+
+
 .App {
   text-align: center;
 }

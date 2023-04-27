@@ -12,8 +12,8 @@ const App = () => {
         <Sign />
         <hr />
         <Prove />
-		<hr />
-		<Verify />
+        <hr />
+        <Verify />
       </div>
     </div>
   );
