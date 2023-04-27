@@ -15,17 +15,21 @@ const makeProof = async (_proofInput: any, _wasm: string, _zkey: string) => {
 };
 
 
-function App() {
+function Prove() {
     const [inputJson, setInputJson] = useState("");
 	const [proof, setProof] = useState("");
 	const [signals, setSignals] = useState("");
 	const [redactedJson, setRedactedJson] = useState("");
-    const [redactMap, setRedactMap] = useState("");
+    const [redactMap, setRedactMap] = useState<Array<number>>(Array(MAX_JSON_SIZE).fill(1));
 
 	let wasmFile = "http://localhost:8000/redactString.wasm";
 	let zkeyFile = "http://localhost:8000/circuit_final.zkey";
 
-
+	const chooseRedaction = () => {
+		let _redactMap = redactMap;
+		_redactMap[4] = 0; // Hide the 4 letter to test
+		setRedactMap(_redactMap);
+	}
 	const runProofs = () => {
 
         let proofInput = JSON.parse(inputJson);
@@ -33,8 +37,7 @@ function App() {
         
         // We build redact map from the input json.
         let jsonArray = proofInput.json;
-        let redactMap = Array(jsonArray.length).fill(1);
-        redactMap[4] = 0; // Hide the 4 letter to test
+
     
         proofInput["redact_map"] = redactMap;
 
@@ -73,27 +76,25 @@ function App() {
 
 	return (
 		<div>
-			<header className="App-header">
-				<h1>Prove Section</h1>
-				<pre>Signed Witness Inputs</pre>
-				<textarea 
-					id="jsonInput"
-					rows={4}
-					required={true}
-					value={inputJson}
-					onChange={(event) => {setInputJson(event.target.value)}} 
-					placeholder={inputPlaceholder}
-				></textarea>
-                {/* We should also have a json upload option */}
-				<button onClick={runProofs}>Generate Proof</button>
-				Proof: <p>{proof}</p>
-				Signals: <p>{signals}</p>
-				Redacted JSON: <p>{redactedJson}</p>
-				<button disabled={!(proof && signals)} onClick={downloadJSON}>Download Proof Artifacts</button>
-			</header>
+			<h1>Prove Section</h1>
+			<pre>Signed Witness Inputs</pre>
+			<textarea 
+				id="jsonInput"
+				rows={4}
+				required={true}
+				value={inputJson}
+				onChange={(event) => {setInputJson(event.target.value)}} 
+				placeholder={inputPlaceholder}
+			></textarea>
+			{/* We should also have a json upload option */}
+			<button onClick={runProofs}>Generate Proof</button>
+			Proof: <p>{proof}</p>
+			Signals: <p>{signals}</p>
+			Redacted JSON: <p>{redactedJson}</p>
+			<button disabled={!(proof && signals)} onClick={downloadJSON}>Download Proof Artifacts</button>
 		</div>
 	);
 }
 
 
-export default App;
+export default Prove;
