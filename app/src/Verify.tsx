@@ -3,12 +3,6 @@ import "./App.css";
 
 const snarkjs = require("snarkjs");
 
-// utilities
-// const MAX_JSON_SIZE = 1000; // TODO: increase the size after testing (slower)
-// export type Ascii = number;
-// export function toAsciiArray(str: string): Ascii[] {
-//     return Array.from(str).map((_, i) => str.charCodeAt(i));
-// }
 
 const verificationKey = "http://localhost:8000/verification_key.json";
 const verifyProof = async (_verificationkey: string, signals: any, proof: any) => {
@@ -20,12 +14,12 @@ const verifyProof = async (_verificationkey: string, signals: any, proof: any) =
 };
 
 const Verify = () => {
-    const [proof, setProof] = useState("");
-    const [signals, setSignals] = useState("");
-    const [isValid, setIsValid] = useState(false);
+  const [proof, setProof] = useState("");
+  const [signals, setSignals] = useState("");
+  const [isValid, setIsValid] = useState(false);
 
 
-    const runVerify = () => {
+  const runVerify = () => {
 		let _proof = JSON.parse(proof);
 		let _signals = JSON.parse(signals);
 
