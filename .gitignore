@@ -9,7 +9,7 @@ app/src/zkproof/challenge*
 app/src/zkproof/response*
 
 # dependencies
-/node_modules
+/app/node_modules
 /.pnp
 .pnp.js
 
