@@ -1,13 +1,8 @@
 import React, { useState } from 'react';
-const snarkjs = require("snarkjs");
-const { buildBabyjub, buildMimc7, buildEddsa } = require("circomlibjs");
+import { MAX_JSON_SIZE, toAsciiArray } from "./Utilities";
+import "./App.css";
 
-// utilities
-const MAX_JSON_SIZE = 1000; // TODO: increase the size after testing (slower)
-export type Ascii = number;
-export function toAsciiArray(str: string): Ascii[] {
-    return Array.from(str).map((_, i) => str.charCodeAt(i));
-}
+const { buildBabyjub, buildMimc7, buildEddsa } = require("circomlibjs");
 
 
 const Sign = () => {

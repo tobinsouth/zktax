@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent } from 'react';
+import "./App.css";
+
 const snarkjs = require("snarkjs");
 
 // utilities
@@ -32,22 +34,28 @@ const Verify = () => {
 		});
 	}
 
-    const handleProofUpload = (event) => {
-		const file = event.target.files[0];
-		const reader = new FileReader();
-		reader.onload = () => {
-		  setProof(reader.result);
-		};
-		reader.readAsText(file);
+  const handleProofUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      if (typeof reader.result === 'string') {
+        setProof(reader.result);
+      } 
+      reader.readAsText(file);
+    }
 	};
 	  
-	const handleSignalsUpload = (event) => {
-		const file = event.target.files[0];
-		const reader = new FileReader();
-		reader.onload = () => {
-		  setSignals(reader.result);
-		};
-		reader.readAsText(file);
+	const handleSignalsUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          setSignals(reader.result);
+        }
+      };
+      reader.readAsText(file);
+    }
 	};
 
   return (
