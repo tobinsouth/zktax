@@ -1,4 +1,4 @@
-export const MAX_JSON_SIZE = 1000; // TODO: increase the size after testing (slower)
+export const MAX_JSON_SIZE = 25; // TODO: increase the size after testing (slower)
 export const signalsArrayToJSON = (signalsInput: string) => {
 	// The signals will return a long array of numbers. The first max_json_size elements are our JSON string as a ascii array (with lots of whitespace). For there we just convert it to a string and parse it using JSON.parse.
 	const max_json_size = 10;
