@@ -30,15 +30,17 @@ function Prove() {
 		_redactMap[4] = 0; // Hide the 4 letter to test
 		setRedactMap(_redactMap);
 	}
+
 	const runProofs = () => {
+
 
         let proofInput = JSON.parse(inputJson);
         console.log("Proof input", proofInput);
-        
+		
         // We build redact map from the input json.
         let jsonArray = proofInput.json;
+		chooseRedaction();
 
-    
         proofInput["redact_map"] = redactMap;
 
 		makeProof(proofInput, wasmFile, zkeyFile).then(({ proof: _proof, publicSignals: _signals }) => {
