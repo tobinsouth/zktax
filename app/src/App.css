@@ -12,7 +12,7 @@ p {
 }
 
 /* Button styles */
-button {
+/* button {
 	padding: 0.75rem 1rem;
 	background-color: #3b82f6;
 	color: #fff;
@@ -22,11 +22,11 @@ button {
 	transition-property: background-color;
 	transition-duration: 300ms;
 	transition-timing-function: ease-in-out;
-}
+} */
 
-button:hover {
+/* button:hover {
 	background-color: #2563eb;
-}
+} */
 
 /* Textarea styles */
 textarea {
