@@ -5,7 +5,7 @@ export const signalsArrayToJSON = (signalsInput: string) => {
 
 	const signals_array = JSON.parse(signalsInput);
 	// As we change the circuit, we need to manually figure out where the json will be included in the signal
-	const signals_section = signals_array.slice(1, MAX_JSON_SIZE+1); // extract the first max_json_size elements from signals
+	const signals_section = signals_array.slice(0, MAX_JSON_SIZE); // extract the first max_json_size elements from signals
 	const signals_str = signals_section.map((code: number) => String.fromCharCode(code)).join('');
 	const signals_obj = JSON.parse(signals_str); // parse signals_str into a JavaScript object
 	const signals_json_str = JSON.stringify(signals_obj);

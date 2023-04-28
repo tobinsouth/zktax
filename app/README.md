@@ -1,8 +1,14 @@
-# React + snarkjs
-This is a minimal project to get react (typescript) and snarkjs up and running.
+# Zero-knowledge Tax Audit app
 
+Sign, Redact and Prove, Verify
 
-You can see more details of running circom. https://github.com/iden3/snarkjs.
+The circuit and related files are located in the folder `src/zkproof`. 
+
+Larger files needed for a larger JSON blob (size > 100) and hence real demo are not stored in git, but can be generated from the src files.
+
+See `src/zkproof` for instructions.
+
+## Run
 
 To install the necessary packages etc, run `yarn install`. 
 
@@ -18,5 +24,10 @@ node index.js
 yarn start
 ```
 
-The circuit and related files are located in the folder `src/zkproof`. 
+To fix ssl issue:
+`export NODE_OPTIONS=--openssl-legacy-provider`
+
+`yarn start`
+
+http://localhost:3000/
 

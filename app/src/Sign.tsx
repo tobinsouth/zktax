@@ -39,9 +39,15 @@ const Sign = () => {
     // do the signing
     const signature = eddsa.signMiMC(sk, hash);
 
+    const getFakeRedactMap = () => {
+      let redactMap = Array(MAX_JSON_SIZE).fill(1)
+      redactMap[4] = 0; // Hide the 4 letter to test
+      return redactMap;
+    }
+
     const inputs = {
         json: paddedInput,
-        expected_hash: BigInt(F.toObject(hash)).toString(),
+        //expected_hash: BigInt(F.toObject(hash)).toString(),
         pubkey: [
             BigInt(F.toObject(pk[0])).toString(),
             BigInt(F.toObject(pk[1])).toString(),
@@ -49,6 +55,7 @@ const Sign = () => {
         signature_R8x: BigInt(F.toObject(signature.R8[0])).toString(),
         signature_R8y: BigInt(F.toObject(signature.R8[1])).toString(),
         signature_S: BigInt(signature.S).toString(),
+        redact_map: getFakeRedactMap(),
     };
 
     console.log("Inputs", JSON.stringify(inputs))

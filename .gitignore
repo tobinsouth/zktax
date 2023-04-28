@@ -1,12 +1,20 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# powers of tau ceremoney files
 app/src/zkproof/*.ptau
 app/src/zkproof/*.ptau
-app/src/zkproof/*.r1cs.json
 app/src/zkproof/challenge_phase* 
 app/src/zkproof/response_phase* 
-app/src/zkproof/*.wtns
 app/src/zkproof/challenge*
 app/src/zkproof/response*
+# circom + snarkjs generated files not needed for web demo
+app/src/zkproof/*.r1cs.json
+app/src/zkproof/*.wtns
+app/src/zkproof/circuit*_js
+app/src/zkproof/proof*
+app/src/zkproof/public*
+app/src/zkproof/*.sym
+app/src/zkproof/*.r1cs
 
 # dependencies
 /app/node_modules
