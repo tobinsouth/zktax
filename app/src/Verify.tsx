@@ -11,7 +11,7 @@ const pageStyle: PageStyle = {
 
 const snarkjs = require("snarkjs");
 
-const verificationKey = "http://localhost:8000/verification_key.json";
+const verificationKey = "http://localhost:8000/verification_key25.json";
 const verifyProof = async (_verificationkey: string, signals: any, proof: any) => {
 	const vkey = await fetch(_verificationkey).then(function (res) {
 		return res.json();
@@ -26,6 +26,7 @@ const Verify = () => {
 	const [isValid, setIsValid] = useState(false);
 
 	const runVerify = () => {
+		console.log("Running verify", proof);
 		let _proof = JSON.parse(proof);
 		let _signals = JSON.parse(signals);
 
@@ -38,9 +39,19 @@ const Verify = () => {
 		if (event.target.files && event.target.files.length > 0) {
 			const file = event.target.files[0];
 			const reader = new FileReader();
-			if (typeof reader.result === "string") {
-				setProof(reader.result);
-			}
+
+			reader.onload = () => {
+				if (typeof reader.result === "string") {
+					setProof(reader.result);
+				} else {
+					console.log("Error reading proof file", reader.result);
+				}
+			};
+
+			reader.onerror = () => {
+				console.log("Error reading file", reader.error);
+			};
+
 			reader.readAsText(file);
 		}
 	};
@@ -49,11 +60,19 @@ const Verify = () => {
 		if (event.target.files && event.target.files.length > 0) {
 			const file = event.target.files[0];
 			const reader = new FileReader();
+
 			reader.onload = () => {
 				if (typeof reader.result === "string") {
 					setSignals(reader.result);
+				} else {
+					console.log("Error reading proof file", reader.result);
 				}
 			};
+
+			reader.onerror = () => {
+				console.log("Error reading file", reader.error);
+			};
+
 			reader.readAsText(file);
 		}
 	};
