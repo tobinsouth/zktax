@@ -2,6 +2,7 @@ import React, { useState, ChangeEvent } from "react";
 import { PageStyle } from "./App";
 import { ColumnContainer, fonts, PageTitle, RestrictWidthContainer, Text } from "./common";
 import "./App.css";
+const snarkjs = require("snarkjs");
 
 const pageStyle: PageStyle = {
 	backgroundColor: "#f8f8f8",
@@ -9,7 +10,6 @@ const pageStyle: PageStyle = {
 	altBackgroundColor: "#eaeaea",
 };
 
-const snarkjs = require("snarkjs");
 
 const verificationKey = "http://localhost:8000/verification_key1000.json";
 // const verificationKey = "http://localhost:8000/verification_key100.json";

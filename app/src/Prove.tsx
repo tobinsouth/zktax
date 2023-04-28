@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { MAX_JSON_SIZE, signalsArrayToJSON } from "./Utilities";
+import { MAX_JSON_SIZE, signalsArrayToJSON } from "./utilities/jsonUtils";
 import { ColumnContainer, fonts, PageTitle, RestrictWidthContainer, Text } from "./common";
 import { PageStyle } from "./App";
+const snarkjs = require("snarkjs");
 
 const pageStyle: PageStyle = {
 	backgroundColor: "#161616",
@@ -9,7 +10,6 @@ const pageStyle: PageStyle = {
 	altBackgroundColor: "#333333",
 };
 
-const snarkjs = require("snarkjs");
 
 const makeProof = async (_proofInput: any, _wasm: string, _zkey: string) => {
 	console.log("Making proof");
