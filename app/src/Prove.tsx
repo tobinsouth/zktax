@@ -23,8 +23,8 @@ function Prove() {
 	const [redactedJson, setRedactedJson] = useState("");
     const [redactMap, setRedactMap] = useState<Array<number>>(Array(MAX_JSON_SIZE).fill(1));
 
-	let wasmFile = "http://localhost:8000/redactString25.wasm";
-	let zkeyFile = "http://localhost:8000/circuit_final25.zkey";
+	let wasmFile = "http://localhost:8000/circuit25.wasm";
+	let zkeyFile = "http://localhost:8000/circuit25.zkey";
 
 	const chooseRedaction = () => {
 		let _redactMap = redactMap;
@@ -41,14 +41,14 @@ function Prove() {
         let jsonArray = proofInput.json;
 		chooseRedaction();
 
-        proofInput["redactMap"] = redactMap;
+        proofInput["redact_map"] = redactMap;
 		console.log("Proof input", proofInput);
 
 
 		makeProof(proofInput, wasmFile, zkeyFile).then(({ proof: _proof, publicSignals: _signals }) => {
 			setProof(JSON.stringify(_proof, null, 2));
 			setSignals(JSON.stringify(_signals, null, 2));
-		})
+		});
 	};
 
 	useEffect(() => {		
