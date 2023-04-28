@@ -52,14 +52,6 @@ template VerifySignatureAndRedactJson(max_json_size) {
         json_output[i] <==  json[i]*redact_map[i] + 32*(1-redact_map[i]);
     }
 }
-// component main { public [ pubkey ] } = VerifySignatureAndRedactJson(10); // Size 10: 9356 constraints
-// component main { public [ pubkey ] } = VerifySignatureAndRedactJson(25); // Size 25: 14831 constraints --> 14 ptau << For github demo
-// component main { public [ pubkey ] } = VerifySignatureAndRedactJson(50); // Size 50: 23956 constraints --> 15 ptau
-// component main { public [ pubkey ] } = VerifySignatureAndRedactJson(100); // Size 100: 42206 constraints --> 16 ptau << For github demo
-// component main { public [ pubkey ] } = VerifySignatureAndRedactJson(500); // Size 500: 188206 constraints -> 18 ptau
-// component main { public [ pubkey ] } = VerifySignatureAndRedactJson(750); // Size 750: 279456 constraints -> 19 ptau
-// component main { public [ pubkey ] } = VerifySignatureAndRedactJson(1000); // Size 1000: 370706 constraints -> 19 ptau << For bigger demo
-
 
 // Note it doesn't matter (at least in zkrepl) if arrays are arrays of strings of numbers or numbers
 // i.e. {"test":[1,0]} same as {"test":["1", "0"]}
