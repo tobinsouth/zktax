@@ -74,8 +74,12 @@ function Prove() {
 	const [signals, setSignals] = useState("");
 	const [redactedJson, setRedactedJson] = useState("");
 
-	let wasmFile = "http://localhost:8000/circuit25.wasm";
-	let zkeyFile = "http://localhost:8000/circuit25.zkey";
+	//let wasmFile = "http://localhost:8000/circuit25.wasm";
+	// let zkeyFile = "http://localhost:8000/circuit25.zkey";
+	// let wasmFile = "http://localhost:8000/circuit100.wasm";
+	// let zkeyFile = "http://localhost:8000/circuit100.zkey";
+	let wasmFile = "http://localhost:8000/circuit1000.wasm";
+	let zkeyFile = "http://localhost:8000/circuit1000.zkey";
 
 	const processInput = () => {
 		try {

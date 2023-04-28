@@ -15,6 +15,8 @@ app/src/zkproof/proof*
 app/src/zkproof/public*
 app/src/zkproof/*.sym
 app/src/zkproof/*.r1cs
+# Do not commit the very large circuit files
+app/src/zkproof/*1000*
 
 # dependencies
 /app/node_modules
