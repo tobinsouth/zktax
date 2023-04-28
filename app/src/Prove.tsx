@@ -3,14 +3,11 @@ import { MAX_JSON_SIZE, signalsArrayToJSON } from "./Utilities";
 import { ColumnContainer, fonts, PageTitle, RestrictWidthContainer, Text } from "./common";
 import { PageStyle } from "./App";
 
-
 const pageStyle: PageStyle = {
 	backgroundColor: "#161616",
 	textColor: "#f8f8f8",
 	altBackgroundColor: "#333333",
 };
-
-const inputPlaceholder: string = `{"json":[123,34,98,101,97,110,115,34,58,34,103,114,101,97,116,34,125,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32],"expected_hash":"8212667227496080003659044215129690500251129226858791313097901395621523328751","pubkey":["1891156797631087029347893674931101305929404954783323547727418062433377377293","14780632341277755899330141855966417738975199657954509255716508264496764475094"],"signature_R8x":"575367722704732835986236382562944164536106996141647026564175120532141075707","signature_R8y":"5161394658463472095215528820052179047558392292057981442809422878860372724687","signature_S":"1232751336502645209440039865304637461569194785573761662733072429732905422095"}`;
 
 const snarkjs = require("snarkjs");
 
@@ -68,12 +65,14 @@ function RedactCard(props: {inputJson: any, redactKeys: Array<string>, editRedac
 }
 
 function Prove() {
+	// The first half is the input and redaction
 	const [inputJsonOfEverything, setInputJsonOfEverything] = useState("");
 	const [inputJson, setInputJson] = useState<{ [key: string]: any }>({});
+	const [redactKeys, setRedactKeys] = useState<Array<string>>([]);
+	// The second half is the proof output and download
 	const [proof, setProof] = useState("");
 	const [signals, setSignals] = useState("");
 	const [redactedJson, setRedactedJson] = useState("");
-	const [redactKeys, setRedactKeys] = useState<Array<string>>([]);
 
 	let wasmFile = "http://localhost:8000/circuit25.wasm";
 	let zkeyFile = "http://localhost:8000/circuit25.zkey";
@@ -185,7 +184,7 @@ function Prove() {
 					onChange={(event) => {
 						setInputJsonOfEverything(event.target.value);
 					}}
-					placeholder={inputPlaceholder}></textarea>
+					placeholder={"The output of a trust tax verification service"}></textarea>
 				{/* We should also have a json upload option */}
 				<button onClick={processInput}>Select Redaction</button>
 				<RedactCard inputJson={inputJson} redactKeys={redactKeys} editRedactKey={editRedactKey}/>
