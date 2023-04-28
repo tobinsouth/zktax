@@ -2,8 +2,8 @@
 // Use small size for github version
 // Match MAX_JSON_SIZE to circuit files being used.
 // export const MAX_JSON_SIZE = 25;
-export const MAX_JSON_SIZE = 100;
-// export const MAX_JSON_SIZE = 1000;
+// export const MAX_JSON_SIZE = 100;
+export const MAX_JSON_SIZE = 1000;
 
 export const signalsArrayToJSON = (signalsInput: string) => {
 	// The signals will return a long array of numbers. The first max_json_size elements are our JSON string as a ascii array (with lots of whitespace). For there we just convert it to a string and parse it using JSON.parse.
