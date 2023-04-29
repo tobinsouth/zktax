@@ -13,6 +13,8 @@ const pageStyle: PageStyle = {
 	altBackgroundColor: "#161616",
 };
 
+const empty1040src = "/f1040/f1040-2020-empty.pdf";
+
 const Sign = () => {
 	const [inputJson, setInputJson] = useState<string>(`{"SSN": "000-00-0000", "fname": "DONALD J", "lname": "TRUMP", "address_state": "FL", "f_1": "393,229", "f_2a": "2,208", "f_2b": "10,626,179", "f_3a": "17,694","f_3b": "25,347","f_4a": "","f_4b": "","f_5a": "","f_5b": "86,532","f_6a": "","f_6b": "", "f_7": "", "f_8": "-15,825,345", "f_9": "-4,694,058", "f_10a": "101,699","f_10b": "","f_10c": "101,699","f_11": "-4,795,757","f_12": "915,171","f_13": "", "f_14": "915,171","f_15": "0","f_16": "0","f_17": "","f_18": "0","f_19": "","f_20": "","f_21": "","f_22": "0","f_23": "271,973","f_24": "271,973","f_25a": "83,915","f_25b": "","f_25c": "1,733","f_25d": "85,649","f_26": "13,635,520","f_27": "","f_28": "","f_29": "","f_30": "","f_31": "19,397","f_32": "19,397","f_33": "13,740,566","f_34": "13,468,593","f_35a": "","f_35b": "000000000","f_35c": "checking","f_35d": "00000000000000000","f_36": "8,000,000","f_37": "","year": "2020","form": "1040"}`);
 	// const [inputJson, setInputJson] = useState<string>(`{"beans":"great"}`);
@@ -64,6 +66,15 @@ const Sign = () => {
 		<ColumnContainer>
 			<PageTitle title="Sign" subtitle="Get your tax info sign by authority" />
 			<RestrictWidthContainer>
+				{/* <Text>Example empty 2020 Form 1040 from the IRS</Text> */}
+				<a target="_blank" href="https://www.irs.gov/pub/irs-prior/f1040--2020.pdf">https://www.irs.gov/pub/irs-prior/f1040--2020.pdf</a>
+				<iframe src={empty1040src} 
+					id="pdf"
+					style={{width: "auto", maxWidth: 800, height: 400}}
+					scrolling="yes"
+				></iframe>
+				{/* <Text>Drop tax data below</Text> */}
+
 				<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
 					JSON Tax Data
 				</Text>
