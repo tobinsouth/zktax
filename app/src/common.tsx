@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import { Document, pdfjs, Page } from "react-pdf";
 
 export const fonts = {
 	fontXXXL: "72px",
@@ -64,5 +65,24 @@ export const RestrictWidthContainer = (props: { children: React.ReactNode | Reac
 		<RowContainer style={{ width: "100%", justifyContent: "center" }}>
 			<ColumnContainer style={{ maxWidth: "1200px", flex: 1 }}>{props.children}</ColumnContainer>
 		</RowContainer>
+	);
+};
+
+export const PDF1040Display = (props: { file: any }) => {
+	useEffect(() => {
+		pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+	});
+
+	return (
+		<ColumnContainer>
+			<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
+				My 1040
+			</Text>
+			<ColumnContainer style={{ width: "100%", height: "400px", backgroundColor: "#eaeaea", borderRadius: 10 }}>
+				<Document file={props.file}>
+					<Page pageNumber={1} />
+				</Document>
+			</ColumnContainer>
+		</ColumnContainer>
 	);
 };

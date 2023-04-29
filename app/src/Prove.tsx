@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { MAX_JSON_SIZE, signalsArrayToJSON } from "./utilities/jsonUtils";
-import { ColumnContainer, fonts, PageTitle, RestrictWidthContainer, Text } from "./common";
+import { ColumnContainer, fonts, PageTitle, PDF1040Display, RestrictWidthContainer, Text } from "./common";
 import { PageStyle } from "./App";
+import { Document } from "react-pdf";
+
 const snarkjs = require("snarkjs");
 
 const pageStyle: PageStyle = {
@@ -9,7 +11,6 @@ const pageStyle: PageStyle = {
 	textColor: "#f8f8f8",
 	altBackgroundColor: "#333333",
 };
-
 
 const makeProof = async (_proofInput: any, _wasm: string, _zkey: string) => {
 	console.log("Making proof");
@@ -19,49 +20,50 @@ const makeProof = async (_proofInput: any, _wasm: string, _zkey: string) => {
 	return { proof, publicSignals };
 };
 
-function RedactCard(props: {inputJson: any, redactKeys: Array<string>, editRedactKey: any}) {
-  // This is the component that shows the JSON input and allows the user to redact keys by clicking on them
-  const { inputJson, redactKeys, editRedactKey } = props;
+function RedactCard(props: { inputJson: any; redactKeys: Array<string>; editRedactKey: any }) {
+	// This is the component that shows the JSON input and allows the user to redact keys by clicking on them
+	const { inputJson, redactKeys, editRedactKey } = props;
 
-  console.log("inputJson", inputJson);
-  console.log("redactKeys", redactKeys);
+	console.log("inputJson", inputJson);
+	console.log("redactKeys", redactKeys);
 
-  return (
-	<>
-    <ul className="ml-4 font-mono text-sm">
-      <>
-        {inputJson  && (
-          <>
-            {Object.keys(inputJson).map(
-              (key: string, index: any) => {
-              return (              
-                <div key={index}>
-                  <span className="mb-4 mr-4">
-					{'"' + key + '"'}: 
-                    <button className={
-                      inputJson[key] && key in redactKeys ?
-                        "hover:line-through decoration-pink-500 decoration-2 bg-transparent border-none cursor-auto focus:outline-none" :
-                        "line-through decoration-pink-500 decoration-2 bg-transparent border-none cursor-auto focus:outline-none" }
-                        onClick={() =>editRedactKey(key)}
-                      >
-                      {
-                        key in inputJson && 
-                        inputJson[key] && <>{
-							typeof inputJson[key] === 'string' ?
-							'"' + inputJson[key]+ '"' :
-							inputJson[key] 
-                        }</>
-                      }
-                      {/* {index != numKeys - 1 && <>,</>} */}
-                    </button>
-                  </span>
-                </div>)
-			  })}
-          </>
-        )}
-      </>
-    </ul>
-  </>);
+	return (
+		<>
+			<ul className="ml-4 font-mono text-sm">
+				<>
+					{inputJson && (
+						<>
+							{Object.keys(inputJson).map((key: string, index: any) => {
+								return (
+									<div key={index}>
+										<span className="mb-4 mr-4">
+											{'"' + key + '"'}:
+											<button
+												className={
+													inputJson[key] && key in redactKeys
+														? "hover:line-through decoration-pink-500 decoration-2 bg-transparent border-none cursor-auto focus:outline-none"
+														: "line-through decoration-pink-500 decoration-2 bg-transparent border-none cursor-auto focus:outline-none"
+												}
+												onClick={() => editRedactKey(key)}>
+												{key in inputJson && inputJson[key] && (
+													<>
+														{typeof inputJson[key] === "string"
+															? '"' + inputJson[key] + '"'
+															: inputJson[key]}
+													</>
+												)}
+												{/* {index != numKeys - 1 && <>,</>} */}
+											</button>
+										</span>
+									</div>
+								);
+							})}
+						</>
+					)}
+				</>
+			</ul>
+		</>
+	);
 }
 
 function Prove() {
@@ -84,7 +86,7 @@ function Prove() {
 	const processInput = () => {
 		try {
 			let input = JSON.parse(inputJsonOfEverything);
-			const _inputJsonStr = input.json.map((code: number) => String.fromCharCode(code)).join('');
+			const _inputJsonStr = input.json.map((code: number) => String.fromCharCode(code)).join("");
 			const _inputJson = JSON.parse(_inputJsonStr); // parse signals_str into a JavaScript object
 			setInputJson(_inputJson);
 			console.log("processInput", _inputJson);
@@ -112,17 +114,17 @@ function Prove() {
 		}
 
 		let proofInput = JSON.parse(inputJsonOfEverything);
-		let _inputJsonStr = proofInput.json.map((code: number) => String.fromCharCode(code)).join('');
+		let _inputJsonStr = proofInput.json.map((code: number) => String.fromCharCode(code)).join("");
 
 		// We build redact map from the input json and the redact keys
 		let _redactMap = Array(MAX_JSON_SIZE).fill(1);
 		for (var key of redactKeys) {
 			let fakeJson: { [key: string]: any } = {};
 			fakeJson[key] = inputJson[key];
-			let fakeJsonStr = JSON.stringify(fakeJson).slice(1,-1);
+			let fakeJsonStr = JSON.stringify(fakeJson).slice(1, -1);
 			let redactStartIndex = _inputJsonStr?.indexOf(fakeJsonStr);
 			// If redactStartIndex in undefined throw error
-			if(!(redactStartIndex >0)){
+			if (!(redactStartIndex > 0)) {
 				console.log("Redaction error", fakeJsonStr, redactStartIndex);
 			} else {
 				let redactEndIndex = redactStartIndex + fakeJsonStr?.length;
@@ -133,10 +135,10 @@ function Prove() {
 				if (_inputJsonStr[redactEndIndex] === ",") {
 					_redactMap[redactEndIndex] = 0;
 				}
-				console.log("Redacting", redactStartIndex, redactEndIndex)
+				console.log("Redacting", redactStartIndex, redactEndIndex);
 			}
 		}
-	
+
 		proofInput["redact_map"] = _redactMap;
 		console.log("Proof input", proofInput);
 
@@ -173,9 +175,10 @@ function Prove() {
 	};
 
 	return (
-		<ColumnContainer>
+		<ColumnContainer style={{ marginBottom: 50 }}>
 			<PageTitle title="Redact & Prove" subtitle="Pick fields and generate a proof" />
 			<RestrictWidthContainer>
+				<PDF1040Display file={/** Put PDF data here */ ""} />
 				<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
 					Prove Section
 				</Text>
@@ -191,7 +194,7 @@ function Prove() {
 					placeholder={"The output of a trust tax verification service"}></textarea>
 				{/* We should also have a json upload option */}
 				<button onClick={processInput}>Select Redaction</button>
-				<RedactCard inputJson={inputJson} redactKeys={redactKeys} editRedactKey={editRedactKey}/>
+				<RedactCard inputJson={inputJson} redactKeys={redactKeys} editRedactKey={editRedactKey} />
 				<button onClick={runProofs}>Generate Proof</button>
 				Proof: <p>{proof}</p>
 				Signals: <p>{signals}</p>

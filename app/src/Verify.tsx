@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent } from "react";
 import { PageStyle } from "./App";
-import { ColumnContainer, fonts, PageTitle, RestrictWidthContainer, Text } from "./common";
+import { ColumnContainer, fonts, PageTitle, PDF1040Display, RestrictWidthContainer, Text } from "./common";
+import { Document } from "react-pdf";
 import "./App.css";
 const snarkjs = require("snarkjs");
 
@@ -9,7 +10,6 @@ const pageStyle: PageStyle = {
 	textColor: "#161616",
 	altBackgroundColor: "#eaeaea",
 };
-
 
 const verificationKey = "http://localhost:8000/verification_key1000.json";
 // const verificationKey = "http://localhost:8000/verification_key100.json";
@@ -80,9 +80,10 @@ const Verify = () => {
 	};
 
 	return (
-		<ColumnContainer>
+		<ColumnContainer style={{ marginBottom: 50 }}>
 			<PageTitle title="Verify" subtitle="Check the legitimacy of a zk proof" />
 			<RestrictWidthContainer>
+				<PDF1040Display file={/** Put PDF data here */ ""} />
 				<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
 					Proof Details
 				</Text>
