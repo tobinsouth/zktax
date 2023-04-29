@@ -1,9 +1,18 @@
 
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
+import { PDFDocument } from 'pdf-lib';
 
 import { pdfToJSON } from "./utilities/f1040";
 
-export default function PDFToJson() {
+export default function PDFTest() {
+
+    const [pdfDataUri, setPdfDataUri] = useState<string>("");
+
+    async function updatePdf(doc) {
+        const newPdfDataUri = await doc.saveAsBase64({ dataUri: true });
+        // const newPdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+        setPdfDataUri(newPdfDataUri);
+    }
 
     async function testButton() {
         // Question: What is a good way to make us consistently read fields?
@@ -16,7 +25,9 @@ export default function PDFToJson() {
         // const formUrl = 'http://localhost:3000/f1040/f1040-2020-empty.pdf';
         const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
         const json1040 = await pdfToJSON(formPdfBytes);
-        console.log(json1040);
+        // to doc
+        const doc = await PDFDocument.load(formPdfBytes);
+        updatePdf(doc);
     }
 
     async function on1040PDF(e: ChangeEvent<HTMLInputElement>) {
@@ -32,11 +43,16 @@ export default function PDFToJson() {
         const fBytes = await file.arrayBuffer();
         const json1040 = await pdfToJSON(fBytes);
         console.log(json1040)
+        console.log('fBytes')
+        console.log(fBytes)
+        const doc = await PDFDocument.load(fBytes);
+        updatePdf(doc);
+
     }
 
     return (
         <>
-            <div>
+            <div style={{textAlign: "center"}}>
                 <div>
                     <label htmlFor="dropzone-file">
                         <input id="dropzone-file" name='f1040' type="file" onChange={on1040PDF}  />
@@ -45,6 +61,9 @@ export default function PDFToJson() {
 
                 <div>
                     <button color="white" onClick={() => testButton()}>Test PDF</button>
+                </div>
+                <div style={{height: 600}}>
+                    <iframe src={pdfDataUri} id="pdf" style={{width: 800, height: "100%"}}></iframe>
                 </div>
             </div>
 

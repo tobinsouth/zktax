@@ -17,10 +17,11 @@ import { F1040_2020_FIELDNAMES_MAP } from './f1040Fields';
 const CHECK = "X"; // how we represent a checked checkbox
 const IGNORE_FIELD = "-";
 
+export const empty1040src = "/f1040/f1040-2020-empty.pdf";
+
 
 export async function pdfToJSON(fBytes: ArrayBuffer) {
-    // let json = {};
-    let json : Map<string, string> = new Map<string, string>();
+    let json : Map<string, string> = new Map<string, string>(); // {};
     // used for developing the map between IRS fieldnames and those we use
     let fnamesMap : Map<string, string> = new Map<string, string>();
 
@@ -48,7 +49,6 @@ export async function pdfToJSON(fBytes: ArrayBuffer) {
         }
     })
     // Map field names from the IRS fieldnames to ones we use
-    // let renamedJson = <string>{};
     let renamedJson : Map<string, string> = new Map<string, string>();
     for (var key in json) {
         let val = json[key];
@@ -59,7 +59,7 @@ export async function pdfToJSON(fBytes: ArrayBuffer) {
     renamedJson['year'] = '2020';
     renamedJson['form'] = '1040';
     // Used for developing the fieldnames map
-    printFieldNamesMap(fnamesMap);
+    // printFieldNamesMap(fnamesMap);
     return renamedJson;
 }
 
