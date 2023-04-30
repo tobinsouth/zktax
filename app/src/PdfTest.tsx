@@ -2,7 +2,10 @@
 import React, { ChangeEvent, useState } from "react";
 import { PDFDocument } from 'pdf-lib';
 
-import { pdfToJSON } from "./utilities/f1040";
+import { pdfToJSON, updatePdfForm } from "./utilities/f1040";
+
+export const testTrumpTaxJson = "/f1040/f1040-2020-trump.json";
+
 
 export default function PDFTest() {
 
@@ -10,7 +13,6 @@ export default function PDFTest() {
 
     async function updatePdf(doc) {
         const newPdfDataUri = await doc.saveAsBase64({ dataUri: true });
-        // const newPdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
         setPdfDataUri(newPdfDataUri);
     }
 
@@ -20,14 +22,21 @@ export default function PDFTest() {
         // Note the filled out trump example is from the empty IRS form
 
         // trump example form
-        const formUrl = 'http://localhost:3000/f1040/f1040-2020-trump.pdf';
+        // const formUrl = 'http://localhost:3000/f1040/f1040-2020-trump.pdf';
         // empty example form from IRS
-        // const formUrl = 'http://localhost:3000/f1040/f1040-2020-empty.pdf';
+        const formUrl = 'http://localhost:3000/f1040/f1040-2020-empty.pdf';
         const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
         const json1040 = await pdfToJSON(formPdfBytes);
         // to doc
         const doc = await PDFDocument.load(formPdfBytes);
         updatePdf(doc);
+        // to form with fields
+        const form = doc.getForm();
+        // get (redacted?) taxJson using our field names
+        const taxJson = await fetch(testTrumpTaxJson).then((r) => r.json());
+        // const taxJsonString = `{"SSN": "XXXXXXXXX", "fname": "DONALD J", "lname": "TRUMP", "address_state": "FL"}`;
+        // const taxJson = JSON.parse(taxJsonString);
+        updatePdfForm(form, taxJson);
     }
 
     async function on1040PDF(e: ChangeEvent<HTMLInputElement>) {
@@ -42,12 +51,8 @@ export default function PDFTest() {
         const file = fileInput.files[0];
         const fBytes = await file.arrayBuffer();
         const json1040 = await pdfToJSON(fBytes);
-        console.log(json1040)
-        console.log('fBytes')
-        console.log(fBytes)
         const doc = await PDFDocument.load(fBytes);
         updatePdf(doc);
-
     }
 
     return (
@@ -62,7 +67,7 @@ export default function PDFTest() {
                 <div>
                     <button color="white" onClick={() => testButton()}>Test PDF</button>
                 </div>
-                <div style={{height: 600}}>
+                <div style={{height: 400}}>
                     <iframe src={pdfDataUri} id="pdf" style={{width: 800, height: "100%"}}></iframe>
                 </div>
             </div>

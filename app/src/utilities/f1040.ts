@@ -17,6 +17,11 @@ import { F1040_2020_FIELDNAMES_MAP } from './f1040Fields';
 const CHECK = "X"; // how we represent a checked checkbox
 const IGNORE_FIELD = "-";
 
+// metadata
+const YEAR_KEY = "year";
+const FORMNAME_KEY = "form";
+const METADATA_FIELDS = [YEAR_KEY, FORMNAME_KEY];
+
 export const empty1040src = "/f1040/f1040-2020-empty.pdf";
 
 
@@ -47,7 +52,7 @@ export async function pdfToJSON(fBytes: ArrayBuffer) {
             json[fieldName] = IGNORE_FIELD;
             fnamesMap[fieldName] = fieldName;
         }
-    })
+    });
     // Map field names from the IRS fieldnames to ones we use
     let renamedJson : Map<string, string> = new Map<string, string>();
     for (var key in json) {
@@ -56,11 +61,39 @@ export async function pdfToJSON(fBytes: ArrayBuffer) {
         renamedJson[fieldName] = val;
     }
     // Add metadata
-    renamedJson['year'] = '2020';
-    renamedJson['form'] = '1040';
+    renamedJson[YEAR_KEY] = '2020';
+    renamedJson[FORMNAME_KEY] = '1040';
     // Used for developing the fieldnames map
     // printFieldNamesMap(fnamesMap);
     return renamedJson;
+}
+
+export function updatePdfForm(form: PDFForm, taxJson) {
+    const reverseFieldnamesMap = getReverseFieldNamesMap();
+    // update the form with the reverse map
+    for (var key in taxJson) {
+        if (METADATA_FIELDS.includes(key)) { continue };
+        let value = taxJson[key];
+        let fieldName = reverseFieldnamesMap[key];
+        let field = form.getField(fieldName);
+        if (!!PDFTextField.prototype.isPrototypeOf(field)) {
+            field.setText(value);
+        }
+        else if (!!PDFCheckBox.prototype.isPrototypeOf(field)) {
+            if (value === CHECK) field.check();
+        }
+        else {
+            console.error('Unhandled field:', fieldName, field);
+        }
+    }
+}
+
+export function getReverseFieldNamesMap () {
+    let reverseFieldnamesMap = Map<string, string>;
+    Object.keys(F1040_2020_FIELDNAMES_MAP).forEach(function(key) {
+        reverseFieldnamesMap[F1040_2020_FIELDNAMES_MAP[key]] = key;
+    });
+    return reverseFieldnamesMap;    
 }
 
 function printFieldNamesMap (fnamesMap: any) {
