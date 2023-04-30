@@ -15,8 +15,12 @@ app/src/zkproof/proof*
 app/src/zkproof/public*
 app/src/zkproof/*.sym
 app/src/zkproof/*.r1cs
-# Do not commit the very large circuit files
+# Do not commit the very large compiled circuit files, include the source and test inputs
 app/src/zkproof/*1000*
+app/src/zkproof/*1500*
+app/src/zkproof/*2000*
+!app/src/zkproof/circuit*.circom
+!app/src/zkproof/input*.json
 
 # dependencies
 /app/node_modules

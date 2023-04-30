@@ -11,7 +11,9 @@ const pageStyle: PageStyle = {
 };
 
 
-const verificationKey = "http://localhost:8000/verification_key1000.json";
+// const verificationKey = "http://localhost:8000/verification_key2000.json";
+const verificationKey = "http://localhost:8000/verification_key1500.json";
+// const verificationKey = "http://localhost:8000/verification_key1000.json";
 // const verificationKey = "http://localhost:8000/verification_key100.json";
 // const verificationKey = "http://localhost:8000/verification_key25.json";
 const verifyProof = async (_verificationkey: string, signals: any, proof: any) => {

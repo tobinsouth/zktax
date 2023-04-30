@@ -78,8 +78,12 @@ function Prove() {
 	// let zkeyFile = "http://localhost:8000/circuit25.zkey";
 	// let wasmFile = "http://localhost:8000/circuit100.wasm";
 	// let zkeyFile = "http://localhost:8000/circuit100.zkey";
-	let wasmFile = "http://localhost:8000/circuit1000.wasm";
-	let zkeyFile = "http://localhost:8000/circuit1000.zkey";
+	// let wasmFile = "http://localhost:8000/circuit1000.wasm";
+	// let zkeyFile = "http://localhost:8000/circuit1000.zkey";
+	let wasmFile = "http://localhost:8000/circuit1500.wasm";
+	let zkeyFile = "http://localhost:8000/circuit1500.zkey";
+	// let wasmFile = "http://localhost:8000/circuit2000.wasm";
+	// let zkeyFile = "http://localhost:8000/circuit2000.zkey";
 
 	const processInput = () => {
 		try {
@@ -138,7 +142,10 @@ function Prove() {
 		}
 	
 		proofInput["redact_map"] = _redactMap;
+		console.log("redact_map");
+		console.log(JSON.stringify(_redactMap));
 		console.log("Proof input", proofInput);
+		console.log(JSON.stringify(proofInput));
 
 		makeProof(proofInput, wasmFile, zkeyFile).then(({ proof: _proof, publicSignals: _signals }) => {
 			setProof(JSON.stringify(_proof, null, 2));
