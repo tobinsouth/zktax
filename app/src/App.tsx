@@ -2,6 +2,7 @@ import React from "react";
 import Sign from "./Sign";
 import Prove from "./Prove";
 import Verify from "./Verify";
+import PdfTest from "./PdfTest";
 import styled from "styled-components";
 import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
@@ -19,6 +20,7 @@ const App = () => {
 		<AppContainer>
 			<Header />
 			<Routes>
+				<Route key="pdfTest" path="/pdfTest" element={<PdfTest />} />
 				<Route key="sign" path="/sign" element={<Sign />} />
 				<Route key="home" path="/prove" element={<Prove />} />
 				<Route key="home" path="/verify" element={<Verify />} />
