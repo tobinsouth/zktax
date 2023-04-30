@@ -16,6 +16,10 @@ Git contains the smaller files for tests.
     - compiled with 17 powers of tau
 - circuit1000: `max_json_size=1000`
     - compiled with 19 powers of tau
+- circuit1500: `max_json_size=1500`
+    - compiled with 20 powers of tau
+- circuit2000: `max_json_size=2000`
+    - compiled with 20 powers of tau
 
 
 All necessary files can be recompiled from the `circuitX.circom` files and tested with the `inputX.json` files by following the instructions from snarkjs: 
@@ -23,3 +27,27 @@ https://github.com/iden3/snarkjs
 
 
 We use groth16.
+
+
+Steps used to compile/test the circuit files are below
+
+```
+circom circuit2000.circom --r1cs --wasm --sym
+
+mv circuit2000_js/circuit2000.wasm .
+
+# multiple steps for the groth16 setup -- should contribute to the phase 2 ceremonhy
+snarkjs groth16 setup circuit2000.r1cs pot20_final.ptau circuit2000.zkey
+
+# verify the zkey
+snarkjs zkey verify circuit2000.r1cs pot20_final.ptau circuit2000.zkey
+
+# export verification key
+snarkjs zkey export verificationkey circuit2000.zkey verification_key2000.json
+
+# Test prove and verify
+# prove
+snarkjs groth16 fullprove input2000.json circuit2000.wasm circuit2000.zkey proof2000.json public2000.json
+# verify
+snarkjs groth16 verify verification_key2000.json public2000.json proof2000.json
+```
