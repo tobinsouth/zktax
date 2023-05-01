@@ -20,3 +20,8 @@ code {
 	text-underline-offset: 1.5px;
 	text-decoration-thickness: 1.5px;
 }
+
+.checkbox {
+	background-color: #e1e1e1;
+	border-color: #161616;
+}

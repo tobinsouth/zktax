@@ -1,15 +1,16 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import { PageStyle } from "./App";
-import { ColumnContainer, fonts, PageTitle, RestrictWidthContainer, Text } from "./common";
+import { Button, ColumnContainer, fonts, PageTitle, RestrictWidthContainer, RowContainer, Text } from "./common";
 import "./App.css";
+import { useColor } from "./ColorContext";
 const snarkjs = require("snarkjs");
 
-const pageStyle: PageStyle = {
+const verifyPageStyle: PageStyle = {
 	backgroundColor: "#f8f8f8",
 	textColor: "#161616",
 	altBackgroundColor: "#eaeaea",
+	buttonColor: "#ADD8E6",
 };
-
 
 // const verificationKey = "http://localhost:8000/verification_key2000.json";
 const verificationKey = "http://localhost:8000/verification_key1500.json";
@@ -28,14 +29,24 @@ const Verify = () => {
 	const [proof, setProof] = useState("");
 	const [signals, setSignals] = useState("");
 	const [isValid, setIsValid] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const [showResult, setShowResult] = useState(false);
+	const { pageStyle, setPageStyle } = useColor();
+
+	useEffect(() => {
+		setPageStyle(verifyPageStyle);
+	});
 
 	const runVerify = () => {
 		console.log("Running verify", proof);
+		setIsLoading(true);
+		setShowResult(true);
 		let _proof = JSON.parse(proof);
 		let _signals = JSON.parse(signals);
 
 		verifyProof(verificationKey, _signals, _proof).then((_isValid) => {
 			setIsValid(_isValid);
+			setIsLoading(false);
 		});
 	};
 
@@ -82,23 +93,44 @@ const Verify = () => {
 	};
 
 	return (
-		<ColumnContainer>
+		<ColumnContainer style={{ paddingBottom: 50, backgroundColor: pageStyle.backgroundColor }}>
 			<PageTitle title="Verify" subtitle="Check the legitimacy of a zk proof" />
 			<RestrictWidthContainer>
-				<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
-					Proof Details
-				</Text>
-				<div>
-					<label htmlFor="proof-upload">Upload proof:</label>
-					<input type="file" id="proof-upload" accept=".json" onChange={handleProofUpload} />
-				</div>
-				<div>
-					<label htmlFor="signals-upload">Upload signals:</label>
-					<input type="file" id="signals-upload" accept=".json" onChange={handleSignalsUpload} />
-				</div>
-				<button onClick={runVerify}>Verify Proof</button>
-				Result:
-				{proof.length > 0 && <p>{isValid ? "Valid proof" : "Invalid proof"}</p>}
+				{showResult ? (
+					<ColumnContainer>
+						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 10, marginTop: 20 }}>
+							{isLoading ? "Proccessing validation..." : "Proof Validation Result"}
+						</Text>
+						{isLoading ? null : (
+							<Text
+								size={fonts.fontL}
+								style={{ fontWeight: "700", marginBottom: 10, color: isValid ? "#33ff57" : "#D22B2B" }}>
+								{isValid ? "VALID PROOF" : "INVALID PROOF"}
+							</Text>
+						)}
+					</ColumnContainer>
+				) : (
+					<ColumnContainer>
+						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 10, marginTop: 20 }}>
+							Proof Details
+						</Text>
+						<RowContainer style={{ marginBottom: 5 }}>
+							<ColumnContainer style={{ flex: 1, marginRight: 5 }}>
+								<Text size={fonts.fontXS} style={{ fontWeight: "700", marginBottom: 5 }}>
+									Upload Proof
+								</Text>
+								<input type="file" id="proof-upload" accept=".json" onChange={handleProofUpload} />
+							</ColumnContainer>
+							<ColumnContainer style={{ flex: 1, marginLeft: 5 }}>
+								<Text size={fonts.fontXS} style={{ fontWeight: "700", marginBottom: 5 }}>
+									Upload Signals
+								</Text>
+								<input type="file" id="signals-upload" accept=".json" onChange={handleSignalsUpload} />
+							</ColumnContainer>
+						</RowContainer>
+						<Button title="Verify Proof" onClick={runVerify} />
+					</ColumnContainer>
+				)}
 			</RestrictWidthContainer>
 		</ColumnContainer>
 	);

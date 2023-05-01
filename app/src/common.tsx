@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useColor } from "./ColorContext";
 
 export const fonts = {
 	fontXXXL: "72px",
@@ -40,19 +41,20 @@ export const ColumnDivider = styled.div`
 `;
 
 export const PageTitle = (props: { title: string; subtitle: string }) => {
+	const { pageStyle } = useColor();
 	return (
 		<ColumnContainer
 			style={{
 				height: "30vh",
 				width: "100%",
-				backgroundColor: "#ADD8E6",
+				backgroundColor: pageStyle.backgroundColor,
 				justifyContent: "center",
 				alignItems: "center",
 			}}>
-			<Text size={fonts.fontXXL} style={{ fontWeight: "600", color: "#f8f8f8" }}>
+			<Text size={fonts.fontXXL} style={{ fontWeight: "600", color: pageStyle.textColor }}>
 				{props.title}
 			</Text>
-			<Text size={fonts.fontM} style={{ fontWeight: "300", color: "#f8f8f8" }}>
+			<Text size={fonts.fontM} style={{ fontWeight: "300", color: pageStyle.textColor }}>
 				{props.subtitle}
 			</Text>
 		</ColumnContainer>
@@ -64,5 +66,26 @@ export const RestrictWidthContainer = (props: { children: React.ReactNode | Reac
 		<RowContainer style={{ width: "100%", justifyContent: "center" }}>
 			<ColumnContainer style={{ maxWidth: "1200px", flex: 1 }}>{props.children}</ColumnContainer>
 		</RowContainer>
+	);
+};
+
+export const Button = (props: { title: string; onClick: () => void; style?: any }) => {
+	const { pageStyle } = useColor();
+	return (
+		<button
+			onClick={props.onClick}
+			style={{
+				marginTop: 5,
+				height: 40,
+				border: "none",
+				backgroundColor: pageStyle.buttonColor,
+				cursor: "pointer",
+				borderRadius: 5,
+				fontWeight: "600",
+				fontSize: fonts.fontXS,
+				...props.style,
+			}}>
+			{props.title}
+		</button>
 	);
 };

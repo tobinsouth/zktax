@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { MAX_JSON_SIZE, signalsArrayToJSON } from "./utilities/jsonUtils";
-import { ColumnContainer, fonts, PageTitle, RestrictWidthContainer, Text } from "./common";
+import { Button, ColumnContainer, fonts, PageTitle, RestrictWidthContainer, RowContainer, Text } from "./common";
 import { PageStyle } from "./App";
+import { useColor } from "./ColorContext";
 const snarkjs = require("snarkjs");
 
-const pageStyle: PageStyle = {
+const provePageStyle: PageStyle = {
 	backgroundColor: "#161616",
 	textColor: "#f8f8f8",
 	altBackgroundColor: "#333333",
+	buttonColor: "#ADD8E6",
 };
-
 
 const makeProof = async (_proofInput: any, _wasm: string, _zkey: string) => {
 	console.log("Making proof");
@@ -19,52 +20,102 @@ const makeProof = async (_proofInput: any, _wasm: string, _zkey: string) => {
 	return { proof, publicSignals };
 };
 
-function RedactCard(props: {inputJson: any, redactKeys: Array<string>, editRedactKey: any}) {
-  // This is the component that shows the JSON input and allows the user to redact keys by clicking on them
-  const { inputJson, redactKeys, editRedactKey } = props;
+const RedactTable = (props: { inputJson: any; redactKeys: Array<string>; editRedactKey: any }) => {
+	const { inputJson, redactKeys, editRedactKey } = props;
+	const [allChecked, setAllChecked] = useState(false);
 
-  console.log("inputJson", inputJson);
-  console.log("redactKeys", redactKeys);
+	const onAllChecked = (check: boolean) => {
+		Object.keys(inputJson).map((k) => {
+			const checked = redactKeys.includes(k);
+			if ((check && !checked) || (!check && checked)) {
+				editRedactKey(k);
+			}
+		});
+	};
 
-  return (
-	<>
-    <ul className="ml-4 font-mono text-sm">
-      <>
-        {inputJson  && (
-          <>
-            {Object.keys(inputJson).map(
-              (key: string, index: any) => {
-              return (              
-                <div key={index}>
-                  <span className="mb-4 mr-4">
-					{'"' + key + '"'}: 
-                    <button className={
-                      inputJson[key] && key in redactKeys ?
-                        "hover:line-through decoration-pink-500 decoration-2 bg-transparent border-none cursor-auto focus:outline-none" :
-                        "line-through decoration-pink-500 decoration-2 bg-transparent border-none cursor-auto focus:outline-none" }
-                        onClick={() =>editRedactKey(key)}
-                      >
-                      {
-                        key in inputJson && 
-                        inputJson[key] && <>{
-							typeof inputJson[key] === 'string' ?
-							'"' + inputJson[key]+ '"' :
-							inputJson[key] 
-                        }</>
-                      }
-                      {/* {index != numKeys - 1 && <>,</>} */}
-                    </button>
-                  </span>
-                </div>)
-			  })}
-          </>
-        )}
-      </>
-    </ul>
-  </>);
-}
+	return (
+		<ColumnContainer style={{ width: "100%", marginBottom: 10 }}>
+			<RowContainer
+				style={{
+					justifyContent: "space-around",
+					paddingTop: 10,
+					paddingBottom: 10,
+					backgroundColor: "#e1e1e1",
+					borderRadius: 5,
+					alignItems: "center",
+				}}>
+				<RowContainer style={{ width: "33%", justifyContent: "center" }}>
+					<input
+						id="all"
+						type="checkbox"
+						checked={allChecked}
+						style={{
+							height: 20,
+							width: 20,
+							cursor: "pointer",
+							borderWidth: 2,
+						}}
+						onChange={() => {
+							onAllChecked(!allChecked);
+							setAllChecked(!allChecked);
+						}}
+						className="checkbox"
+					/>
+				</RowContainer>
+				<Text size={fonts.fontS} style={{ fontWeight: "600", width: "33%", textAlign: "center" }}>
+					Form Field
+				</Text>
+				<Text size={fonts.fontS} style={{ fontWeight: "600", width: "33%", textAlign: "center" }}>
+					Value
+				</Text>
+			</RowContainer>
+			{Object.keys(inputJson).map((key: string, index: any) => {
+				const value = inputJson[key];
+				const checked = redactKeys.includes(key);
+				return (
+					<RowContainer
+						style={{
+							justifyContent: "space-around",
+							paddingTop: 10,
+							paddingBottom: 10,
+							backgroundColor: "#e1e1e1",
+							borderRadius: 5,
+							alignItems: "center",
+							marginTop: 8,
+						}}>
+						<RowContainer style={{ width: "33%", justifyContent: "center" }}>
+							<input
+								id="all"
+								type="checkbox"
+								checked={checked}
+								style={{
+									height: 20,
+									width: 20,
+									cursor: "pointer",
+									borderWidth: 2,
+								}}
+								onChange={() => editRedactKey(key)}
+								className="checkbox"
+							/>
+						</RowContainer>
+						<Text size={fonts.fontS} style={{ fontWeight: "300", width: "33%", textAlign: "center" }}>
+							{key}
+						</Text>
+						<Text size={fonts.fontS} style={{ fontWeight: "300", width: "33%", textAlign: "center" }}>
+							{value}
+						</Text>
+					</RowContainer>
+				);
+			})}
+		</ColumnContainer>
+	);
+};
 
 function Prove() {
+	// What to show
+	const [showRedactTable, setShowRedactTable] = useState(false);
+	const [showProof, setShowProof] = useState(false);
+
 	// The first half is the input and redaction
 	const [inputJsonOfEverything, setInputJsonOfEverything] = useState("");
 	const [inputJson, setInputJson] = useState<{ [key: string]: any }>({});
@@ -73,6 +124,19 @@ function Prove() {
 	const [proof, setProof] = useState("");
 	const [signals, setSignals] = useState("");
 	const [redactedJson, setRedactedJson] = useState("");
+	const { pageStyle, setPageStyle } = useColor();
+
+	useEffect(() => {
+		setPageStyle(provePageStyle);
+	});
+
+	useEffect(() => {
+		setShowRedactTable(Object.keys(inputJson).length > 0);
+	}, [inputJson]);
+
+	useEffect(() => {
+		setShowProof(proof.length > 0 && signals.length > 0);
+	}, [proof, signals]);
 
 	//let wasmFile = "http://localhost:8000/circuit25.wasm";
 	// let zkeyFile = "http://localhost:8000/circuit25.zkey";
@@ -88,7 +152,7 @@ function Prove() {
 	const processInput = () => {
 		try {
 			let input = JSON.parse(inputJsonOfEverything);
-			const _inputJsonStr = input.json.map((code: number) => String.fromCharCode(code)).join('');
+			const _inputJsonStr = input.json.map((code: number) => String.fromCharCode(code)).join("");
 			const _inputJson = JSON.parse(_inputJsonStr); // parse signals_str into a JavaScript object
 			setInputJson(_inputJson);
 			console.log("processInput", _inputJson);
@@ -116,17 +180,17 @@ function Prove() {
 		}
 
 		let proofInput = JSON.parse(inputJsonOfEverything);
-		let _inputJsonStr = proofInput.json.map((code: number) => String.fromCharCode(code)).join('');
+		let _inputJsonStr = proofInput.json.map((code: number) => String.fromCharCode(code)).join("");
 
 		// We build redact map from the input json and the redact keys
 		let _redactMap = Array(MAX_JSON_SIZE).fill(1);
 		for (var key of redactKeys) {
 			let fakeJson: { [key: string]: any } = {};
 			fakeJson[key] = inputJson[key];
-			let fakeJsonStr = JSON.stringify(fakeJson).slice(1,-1);
+			let fakeJsonStr = JSON.stringify(fakeJson).slice(1, -1);
 			let redactStartIndex = _inputJsonStr?.indexOf(fakeJsonStr);
 			// If redactStartIndex in undefined throw error
-			if(!(redactStartIndex >0)){
+			if (!(redactStartIndex > 0)) {
 				console.log("Redaction error", fakeJsonStr, redactStartIndex);
 			} else {
 				let redactEndIndex = redactStartIndex + fakeJsonStr?.length;
@@ -137,10 +201,10 @@ function Prove() {
 				if (_inputJsonStr[redactEndIndex] === ",") {
 					_redactMap[redactEndIndex] = 0;
 				}
-				console.log("Redacting", redactStartIndex, redactEndIndex)
+				console.log("Redacting", redactStartIndex, redactEndIndex);
 			}
 		}
-	
+
 		proofInput["redact_map"] = _redactMap;
 		console.log("redact_map");
 		console.log(JSON.stringify(_redactMap));
@@ -180,13 +244,12 @@ function Prove() {
 	};
 
 	return (
-		<ColumnContainer>
+		<ColumnContainer style={{ paddingBottom: 50, backgroundColor: pageStyle.backgroundColor }}>
 			<PageTitle title="Redact & Prove" subtitle="Pick fields and generate a proof" />
 			<RestrictWidthContainer>
-				<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
-					Prove Section
+				<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 10, marginTop: 20 }}>
+					Signed Witness Inputed
 				</Text>
-				<pre>Signed Witness Inputs</pre>
 				<textarea
 					id="jsonInput"
 					rows={4}
@@ -195,17 +258,46 @@ function Prove() {
 					onChange={(event) => {
 						setInputJsonOfEverything(event.target.value);
 					}}
-					placeholder={"The output of a trust tax verification service"}></textarea>
+					style={{ flex: 1 }}
+					placeholder={"Please enter the output of a trust tax verification service"}
+				/>
+				<Button title="Select Redaction" onClick={processInput} />
 				{/* We should also have a json upload option */}
-				<button onClick={processInput}>Select Redaction</button>
-				<RedactCard inputJson={inputJson} redactKeys={redactKeys} editRedactKey={editRedactKey}/>
-				<button onClick={runProofs}>Generate Proof</button>
-				Proof: <p>{proof}</p>
-				Signals: <p>{signals}</p>
-				Redacted JSON: <p>{redactedJson}</p>
-				<button disabled={!(proof && signals)} onClick={downloadJSON}>
-					Download Proof Artifacts
-				</button>
+				{showRedactTable ? (
+					<ColumnContainer>
+						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 10, marginTop: 40 }}>
+							Select Redaction
+						</Text>
+						<RedactTable inputJson={inputJson} redactKeys={redactKeys} editRedactKey={editRedactKey} />
+						<Button title="Generate Proof" onClick={runProofs} />
+					</ColumnContainer>
+				) : null}
+				{showProof ? (
+					<ColumnContainer>
+						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 10, marginTop: 40 }}>
+							My Proof Artifacts
+						</Text>
+						<Text size={fonts.fontS} style={{ fontWeight: "700", marginBottom: 3 }}>
+							Proof
+						</Text>
+						<Text size={fonts.fontS} style={{}}>
+							{proof}
+						</Text>
+						<Text size={fonts.fontS} style={{ fontWeight: "700", marginBottom: 3, marginTop: 20 }}>
+							Signals
+						</Text>
+						<Text size={fonts.fontS} style={{}}>
+							{signals}
+						</Text>
+						<Text size={fonts.fontS} style={{ fontWeight: "700", marginBottom: 3, marginTop: 20 }}>
+							Redacted JSON
+						</Text>
+						<Text size={fonts.fontS} style={{ marginBottom: 10 }}>
+							{redactedJson}
+						</Text>
+						<Button title="Download Proof Artifacts" onClick={downloadJSON} />
+					</ColumnContainer>
+				) : null}
 			</RestrictWidthContainer>
 		</ColumnContainer>
 	);
