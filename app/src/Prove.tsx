@@ -34,7 +34,7 @@ const RedactTable = (props: { inputJson: any; redactKeys: Array<string>; editRed
 	};
 
 	return (
-		<ColumnContainer style={{ width: "100%", marginBottom: 10 }}>
+		<ColumnContainer style={{ width: "100%", marginBottom: 10, color: "#161616" }}>
 			<RowContainer
 				style={{
 					justifyContent: "space-around",

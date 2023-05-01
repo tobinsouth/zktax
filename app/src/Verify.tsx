@@ -119,13 +119,25 @@ const Verify = () => {
 								<Text size={fonts.fontXS} style={{ fontWeight: "700", marginBottom: 5 }}>
 									Upload Proof
 								</Text>
-								<input type="file" id="proof-upload" accept=".json" onChange={handleProofUpload} />
+								<input
+									type="file"
+									id="proof-upload"
+									accept=".json"
+									onChange={handleProofUpload}
+									style={{ backgroundColor: pageStyle.altBackgroundColor }}
+								/>
 							</ColumnContainer>
 							<ColumnContainer style={{ flex: 1, marginLeft: 5 }}>
 								<Text size={fonts.fontXS} style={{ fontWeight: "700", marginBottom: 5 }}>
 									Upload Signals
 								</Text>
-								<input type="file" id="signals-upload" accept=".json" onChange={handleSignalsUpload} />
+								<input
+									type="file"
+									id="signals-upload"
+									accept=".json"
+									onChange={handleSignalsUpload}
+									style={{ backgroundColor: pageStyle.altBackgroundColor }}
+								/>
 							</ColumnContainer>
 						</RowContainer>
 						<Button title="Verify Proof" onClick={runVerify} />
