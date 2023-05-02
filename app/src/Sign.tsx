@@ -102,20 +102,73 @@ const Sign = () => {
 
 	return (
 		<ColumnContainer style={{ paddingBottom: 50, backgroundColor: pageStyle.backgroundColor }}>
-			<PageTitle title="Sign" subtitle="Get your tax info sign by authority" />
+			<PageTitle title="Trusted Tax Service" subtitle="" />
+			<RowContainer
+				style={{
+					justifyContent: "space-around",
+					paddingTop: 10,
+					paddingBottom: 10,
+					borderRadius: 0,
+					alignItems: "center",
+					borderBottom: "2px solid white",
+					marginBottom: 20,
+				}}>
+					<RestrictWidthContainer>
+					<Text>
+					This page represents a hypothetical service provided by a trusted tax authority that already collects individuals' tax records. E.g. the IRS in the United States.
+					</Text>
+					<Text>
+					This prototype is meant to show that while this service does not currently exist, it could.
+					</Text>
+					<Text>
+					Tax data are often stored in PDF format, and can be converted into other common formats such as JSON. 
+					</Text>
+					<Text>
+					This service uses public key cryptography to sign individuals' tax data, which individuals can then download as JSON. 
+					</Text>
+					<Text>
+					The Trusted Tax Service's public key is public.
+					</Text>
+					<Text>
+					The downloaded data is private.
+					</Text>
+					<br/>
+					<Text>
+					In this demo, instead of users automatically downloading their tax data, users provide tax data to then be signed and output by the service.
+					</Text>
+					<Text>
+					This example uses the 2020 version of US income tax return form 1040.
+					</Text>
+					<br/>
+					<Text>
+					An empty form can be downloaded from the IRS to be filled out and inserted below: 
+
+					<a href="https://www.irs.gov/pub/irs-prior/f1040--2020.pdf" target="_blank">https://www.irs.gov/pub/irs-prior/f1040--2020.pdf</a> 
+					</Text>
+					<Text>
+					Or use this filled out version from a public official who was recently compelled to publish their 2020 form 1040:
+
+					<a href="/f1040/f1040-2020-trump.pdf" target="_blank">/f1040/f1040-2020-trump.pdf</a>
+
+					</Text>
+				</RestrictWidthContainer>
+			</RowContainer>
 			<RestrictWidthContainer>
 				{signedTaxData.length === 0 ? (
 					<ColumnContainer>
-						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 10, marginTop: 20 }}>
-							My 1040
-						</Text>
 						{/* <Text size={fonts.fontM}>Example empty 2020 Form 1040 from the IRS</Text>
 				<a target="_blank" href="https://www.irs.gov/pub/irs-prior/f1040--2020.pdf">
 					https://www.irs.gov/pub/irs-prior/f1040--2020.pdf
 				</a> */}
 						<iframe src={empty1040src} id="pdf" style={{ width: "auto", height: 400 }} scrolling="yes" />
+						<Text style={{color: "white"}}>
+							Trusted Tax Service public key (<a style={{color: "white"}} href="https://iden3-docs.readthedocs.io/en/latest/_downloads/a04267077fb3fdbf2b608e014706e004/Ed-DSA.pdf">EdDSA/MIMC-7</a>)
+						</Text>
+						<pre>
+						["5602421584708175181046807257310257387379311773690155958487101805560296232204","5602421584708175181046807257310257387379311773690155958487101805560296232204"]
+						</pre>
 						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
-							Upload Tax Data
+							Insert Form 1040
 						</Text>
 						<input
 							id="dropzone-file"
@@ -125,7 +178,7 @@ const Sign = () => {
 							style={{ backgroundColor: pageStyle.altBackgroundColor }}
 						/>
 						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
-							OR... Enter Tax Data JSON
+						JSON form data
 						</Text>
 						<textarea
 							value={inputJson}
@@ -135,12 +188,12 @@ const Sign = () => {
 							}}
 							placeholder="Enter JSON here..."
 						/>
-						<Button title="Get Signed Tax Data" background="#ADD8E6" onClick={handleSign} />
+						<Button title="Sign Tax Data" background="#ADD8E6" onClick={handleSign} />
 					</ColumnContainer>
 				) : (
 					<ColumnContainer style={{ marginTop: 20, marginBottom: 20 }}>
 						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
-							My Signed Tax Data
+							Signed Tax Data
 						</Text>
 						<ColumnContainer
 							style={{ padding: 10, backgroundColor: pageStyle.altBackgroundColor, borderRadius: 5 }}>
