@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { PDFDocument } from "pdf-lib";
 import { updatePdfForm } from "./utilities/f1040";
+import { safelyParseJSON } from "./utilities/jsonUtils";
 
-const PDFDisplay = (props: { JSONTaxData: Map<string, string>; style?: any }) => {
+const PDFDisplay = (props: { taxData: string; style?: any }) => {
 	const [pdfDataUri, setPdfDataUri] = useState<string>("");
 
 	useEffect(() => {
-		updateFormState(props.JSONTaxData);
+		const reJSON: Map<string, any> = new Map(Object.entries(safelyParseJSON(props.taxData)));
+		updateFormState(reJSON);
 	}, [props]);
 
 	async function updatePdf(doc: PDFDocument) {

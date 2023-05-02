@@ -1,24 +1,33 @@
 import React from "react";
 import { useColor } from "./ColorContext";
+import { safelyParseJSON } from "./utilities/jsonUtils";
 
 const JSONDisplay = (props: {
-	JSONTaxData: Map<string, string>;
-	onChange: (newData: Map<string, string>) => void;
+	taxData: string;
+	onChange: (newInput: string) => void;
+	default: string;
 	disabled?: boolean;
 	style?: any;
 }) => {
 	const { pageStyle } = useColor();
+	const reJSON = new Map(Object.entries(safelyParseJSON(props.taxData)));
+	const formatted = reJSON.size ? JSON.stringify(Object.fromEntries(reJSON.entries()), null, 4) : props.taxData;
 	return (
 		<textarea
-			value={JSON.stringify(Object.fromEntries(props.JSONTaxData.entries()), null, 4)}
-			style={{ marginBottom: 10, height: 300, backgroundColor: pageStyle.altBackgroundColor, ...props.style }}
+			value={formatted}
+			style={{
+				marginBottom: 10,
+				height: 300,
+				backgroundColor: pageStyle.altBackgroundColor,
+				...props.style,
+				color: pageStyle.textColor,
+			}}
 			onChange={(event) => {
 				try {
-					const parsed = JSON.parse(event.target.value);
-					props.onChange(parsed);
+					props.onChange(event.target.value);
 				} catch {}
 			}}
-			placeholder="Enter JSON here..."
+			placeholder={props.default}
 			disabled={props.disabled || false}
 		/>
 	);

@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
-import { MAX_JSON_SIZE, toAsciiArray } from "./utilities/jsonUtils";
+import { MAX_JSON_SIZE, safelyParseJSON, toAsciiArray } from "./utilities/jsonUtils";
 import "./App.css";
 import { PageStyle } from "./App";
 import { Button, ColumnContainer, fonts, PageTitle, RestrictWidthContainer, RowContainer, Text } from "./common";
@@ -19,7 +19,8 @@ const signPageStyle: PageStyle = {
 };
 
 const Sign = () => {
-	const [actualJson, setActualJson] = useState<Map<string, string>>(new Map());
+	const [inputJson, setInputJson] = useState<string>("");
+	// const [actualJson, setActualJson] = useState<Map<string, string>>(new Map());
 	const [signedTaxData, setSignedTaxData] = useState("");
 	const [signing, setSigning] = useState(false);
 
@@ -41,7 +42,7 @@ const Sign = () => {
 		const file = fileInput.files[0];
 		const fBytes = await file.arrayBuffer();
 		const json1040 = await pdfToJSON(fBytes);
-		setActualJson(json1040);
+		setInputJson(JSON.stringify(Object.fromEntries(json1040)));
 	}
 
 	const filterJsonKeysByValue = (jsonObj: Map<string, string>): Map<string, string> => {
@@ -58,7 +59,8 @@ const Sign = () => {
 
 	const handleSign = async () => {
 		setSigning(true);
-		const parsedJsonObj = filterJsonKeysByValue(actualJson);
+		const reJSON: Map<string, string> = new Map(Object.entries(safelyParseJSON(inputJson)));
+		const parsedJsonObj = filterJsonKeysByValue(reJSON);
 		console.log("filtered JSON");
 		console.log(filterJsonKeysByValue(parsedJsonObj));
 		const parsedJson = JSON.stringify(Object.fromEntries(parsedJsonObj));
@@ -134,15 +136,16 @@ const Sign = () => {
 								<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
 									Example IRS 1040
 								</Text>
-								<PDFDisplay JSONTaxData={actualJson} style={{ flex: 1, minHeight: 400 }} />
+								<PDFDisplay taxData={inputJson} style={{ flex: 1, minHeight: 400 }} />
 							</ColumnContainer>
 							<ColumnContainer>
 								<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
 									Tax Data JSON
 								</Text>
 								<JSONDisplay
-									JSONTaxData={actualJson}
-									onChange={(newData) => setActualJson(newData)}
+									taxData={inputJson}
+									default="Add JSON tax data"
+									onChange={setInputJson}
 									style={{ flex: 1, minWidth: 400 }}
 								/>
 								<Button title="Get Signed Tax Data" onClick={handleSign} />
@@ -155,7 +158,8 @@ const Sign = () => {
 							My Signed Tax Data
 						</Text>
 						<JSONDisplay
-							JSONTaxData={new Map(Object.entries(JSON.parse(signedTaxData)))}
+							taxData={signedTaxData}
+							default="Singed tax JSON will appear here"
 							onChange={() => {}}
 							disabled
 						/>
