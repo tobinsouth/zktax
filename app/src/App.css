@@ -31,9 +31,8 @@ p {
 /* Textarea styles */
 textarea {
 	display: block;
-	width: 100%;
 	padding: 0.5rem 1rem;
-	color: #4b5563;
+	color: #161616;
 	border: 1px solid #d1d5db;
 	border-radius: 0.375rem;
 	outline: none;
@@ -49,9 +48,8 @@ textarea:focus {
 input[type="file"] {
 	appearance: none;
 	display: block;
-	width: 100%;
 	padding: 0.5rem 1rem;
-	color: #4b5563;
+	color: #161616;
 	border: 1px solid #d1d5db;
 	border-radius: 0.375rem;
 	outline: none;

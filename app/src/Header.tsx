@@ -1,18 +1,22 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useColor } from "./ColorContext";
 import { fonts, Text } from "./common";
 
 const Header = () => {
+	const { pageStyle } = useColor();
 	return (
-		<OuterContainer>
-			<Container style={{ color: "#f8f8f8" }}>
+		<OuterContainer style={{ backgroundColor: pageStyle.backgroundColor }}>
+			<Container style={{ color: pageStyle.textColor }}>
 				<LeftContainer>
 					<Link
 						style={{ cursor: "pointer", textDecoration: "none" }}
 						to={{
 							pathname: "/",
 						}}>
-						<Text size={fonts.fontML} style={{ color: "#f8f8f8", fontWeight: "600", cursor: "pointer" }}>
+						<Text
+							size={fonts.fontML}
+							style={{ color: pageStyle.textColor, fontWeight: "600", cursor: "pointer" }}>
 							zkTaxes
 						</Text>
 					</Link>
@@ -23,7 +27,7 @@ const Header = () => {
 						to={{
 							pathname: "/sign",
 						}}>
-						<Text size={fonts.fontS} style={{ color: "#f8f8f8", paddingRight: 30 }}>
+						<Text size={fonts.fontS} style={{ color: pageStyle.textColor, paddingRight: 30 }}>
 							Sign
 						</Text>
 					</Link>
@@ -33,7 +37,7 @@ const Header = () => {
 						to={{
 							pathname: "/prove",
 						}}>
-						<Text size={fonts.fontS} style={{ color: "#f8f8f8", paddingRight: 30 }}>
+						<Text size={fonts.fontS} style={{ color: pageStyle.textColor, paddingRight: 30 }}>
 							Prove
 						</Text>
 					</Link>
@@ -42,7 +46,7 @@ const Header = () => {
 						to={{
 							pathname: "/verify",
 						}}>
-						<Text size={fonts.fontS} style={{ color: "#f8f8f8" }}>
+						<Text size={fonts.fontS} style={{ color: pageStyle.textColor }}>
 							Verify
 						</Text>
 					</Link>
@@ -65,7 +69,6 @@ const Container = styled.div`
 
 const OuterContainer = styled.div`
 	width: 100%;
-	background-color: #add8e6;
 	margin: auto;
 	display: flex;
 	flex-direction: row;
