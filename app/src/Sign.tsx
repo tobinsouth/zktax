@@ -1,12 +1,13 @@
-// @ts-nocheck
 import React, { useState, ChangeEvent, useEffect } from "react";
 import { MAX_JSON_SIZE, toAsciiArray } from "./utilities/jsonUtils";
 import "./App.css";
 import { PageStyle } from "./App";
 import { Button, ColumnContainer, fonts, PageTitle, RestrictWidthContainer, RowContainer, Text } from "./common";
 import { hashAndSignEddsaMiMC } from "./utilities/cryptoUtils";
-import { empty1040src, pdfToJSON } from "./utilities/f1040";
+import { pdfToJSON } from "./utilities/f1040";
 import { useColor } from "./ColorContext";
+import PDFDisplay from "./PDFDisplay";
+import JSONDisplay from "./JSONDisplay";
 
 const { buildBabyjub, buildMimc7, buildEddsa } = require("circomlibjs");
 
@@ -18,10 +19,9 @@ const signPageStyle: PageStyle = {
 };
 
 const Sign = () => {
-	// const [inputJson, setInputJson] = useState<string>(`{"SSN": "000-00-0000", "fname": "DONALD J", "lname": "TRUMP", "address_state": "FL", "f_1": "393,229", "f_2a": "2,208", "f_2b": "10,626,179", "f_3a": "17,694","f_3b": "25,347","f_4a": "","f_4b": "","f_5a": "","f_5b": "86,532","f_6a": "","f_6b": "", "f_7": "", "f_8": "-15,825,345", "f_9": "-4,694,058", "f_10a": "101,699","f_10b": "","f_10c": "101,699","f_11": "-4,795,757","f_12": "915,171","f_13": "", "f_14": "915,171","f_15": "0","f_16": "0","f_17": "","f_18": "0","f_19": "","f_20": "","f_21": "","f_22": "0","f_23": "271,973","f_24": "271,973","f_25a": "83,915","f_25b": "","f_25c": "1,733","f_25d": "85,649","f_26": "13,635,520","f_27": "","f_28": "","f_29": "","f_30": "","f_31": "19,397","f_32": "19,397","f_33": "13,740,566","f_34": "13,468,593","f_35a": "","f_35b": "000000000","f_35c": "checking","f_35d": "00000000000000000","f_36": "8,000,000","f_37": "","year": "2020","form": "1040"}`);
-	// const [inputJson, setInputJson] = useState<string>(`{"beans":"great"}`);
-	const [inputJson, setInputJson] = useState<string>("");
+	const [actualJson, setActualJson] = useState<Map<string, string>>(new Map());
 	const [signedTaxData, setSignedTaxData] = useState("");
+	const [signing, setSigning] = useState(false);
 
 	const { pageStyle, setPageStyle } = useColor();
 
@@ -41,24 +41,28 @@ const Sign = () => {
 		const file = fileInput.files[0];
 		const fBytes = await file.arrayBuffer();
 		const json1040 = await pdfToJSON(fBytes);
-		console.log(json1040);
-		setInputJson(JSON.stringify(json1040));
+		setActualJson(json1040);
 	}
 
-	const filterJsonKeysByValue = (jsonObj: Map<string, string>) => {
+	const filterJsonKeysByValue = (jsonObj: Map<string, string>): Map<string, string> => {
 		// Filter the JSON object to only include keys with a non-empty value
-		return Object.keys(jsonObj).reduce((p, c) => {
-			if (jsonObj[c].length > 0) p[c] = jsonObj[c];
-			return p;
-		}, {});
+		console.log(jsonObj);
+		const p = new Map<string, string>();
+		jsonObj.forEach((v, k) => {
+			if (v.length > 0) {
+				p.set(k, v);
+			}
+		});
+		return p;
 	};
 
 	const handleSign = async () => {
-		let parsedJsonObj = JSON.parse(inputJson);
-		parsedJsonObj = filterJsonKeysByValue(parsedJsonObj);
+		setSigning(true);
+		const parsedJsonObj = filterJsonKeysByValue(actualJson);
 		console.log("filtered JSON");
 		console.log(filterJsonKeysByValue(parsedJsonObj));
-		const parsedJson = JSON.stringify(parsedJsonObj);
+		const parsedJson = JSON.stringify(Object.fromEntries(parsedJsonObj));
+
 		if (parsedJson.length > MAX_JSON_SIZE) {
 			console.error(
 				"Cannot handle json: too large. Max size:",
@@ -66,6 +70,7 @@ const Sign = () => {
 				"Json array size:",
 				parsedJson.length,
 			);
+			setSigning(false);
 			return false;
 		}
 
@@ -83,6 +88,7 @@ const Sign = () => {
 		};
 		console.log("Inputs", JSON.stringify(inputs));
 		setSignedTaxData(JSON.stringify(inputs));
+		setSigning(false);
 	};
 
 	const handleDownload = () => {
@@ -96,24 +102,23 @@ const Sign = () => {
 	};
 
 	const handleCopyToClipboard = () => {
-		navigator.clipboard.writeText(signedTaxData);
-		alert("JSON copied to clipboard");
+		navigator.clipboard.writeText(signedTaxData).then(() => {
+			alert("JSON copied to clipboard");
+		});
 	};
 
 	return (
 		<ColumnContainer style={{ paddingBottom: 50, backgroundColor: pageStyle.backgroundColor }}>
 			<PageTitle title="Sign" subtitle="Get your tax info sign by authority" />
 			<RestrictWidthContainer>
-				{signedTaxData.length === 0 ? (
+				{signing ? (
 					<ColumnContainer>
-						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 10, marginTop: 20 }}>
-							My 1040
+						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
+							Signing tax data...
 						</Text>
-						{/* <Text size={fonts.fontM}>Example empty 2020 Form 1040 from the IRS</Text>
-				<a target="_blank" href="https://www.irs.gov/pub/irs-prior/f1040--2020.pdf">
-					https://www.irs.gov/pub/irs-prior/f1040--2020.pdf
-				</a> */}
-						<iframe src={empty1040src} id="pdf" style={{ width: "auto", height: 400 }} scrolling="yes" />
+					</ColumnContainer>
+				) : signedTaxData.length === 0 ? (
+					<ColumnContainer>
 						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
 							Upload Tax Data
 						</Text>
@@ -124,30 +129,36 @@ const Sign = () => {
 							onChange={on1040PDF}
 							style={{ backgroundColor: pageStyle.altBackgroundColor }}
 						/>
-						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
-							OR... Enter Tax Data JSON
-						</Text>
-						<textarea
-							value={inputJson}
-							style={{ marginBottom: 10, height: 100 }}
-							onChange={(event) => {
-								setInputJson(event.target.value);
-							}}
-							placeholder="Enter JSON here..."
-						/>
-						<Button title="Get Signed Tax Data" background="#ADD8E6" onClick={handleSign} />
+						<RowContainer>
+							<ColumnContainer style={{ flex: 1, marginRight: 10 }}>
+								<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
+									Example IRS 1040
+								</Text>
+								<PDFDisplay JSONTaxData={actualJson} style={{ flex: 1, minHeight: 400 }} />
+							</ColumnContainer>
+							<ColumnContainer>
+								<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
+									Tax Data JSON
+								</Text>
+								<JSONDisplay
+									JSONTaxData={actualJson}
+									onChange={(newData) => setActualJson(newData)}
+									style={{ flex: 1, minWidth: 400 }}
+								/>
+								<Button title="Get Signed Tax Data" onClick={handleSign} />
+							</ColumnContainer>
+						</RowContainer>
 					</ColumnContainer>
 				) : (
 					<ColumnContainer style={{ marginTop: 20, marginBottom: 20 }}>
 						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
 							My Signed Tax Data
 						</Text>
-						<ColumnContainer
-							style={{ padding: 10, backgroundColor: pageStyle.altBackgroundColor, borderRadius: 5 }}>
-							<Text size={fonts.fontXXS} style={{ overflowWrap: "anywhere", color: "#161616" }}>
-								{signedTaxData}
-							</Text>
-						</ColumnContainer>
+						<JSONDisplay
+							JSONTaxData={new Map(Object.entries(JSON.parse(signedTaxData)))}
+							onChange={() => {}}
+							disabled
+						/>
 
 						<RowContainer style={{ marginTop: 10 }}>
 							<Button
