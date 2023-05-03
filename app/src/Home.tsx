@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { PageStyle } from "./App";
 import { useColor } from "./ColorContext";
-import { ColumnContainer, PageTitle, RowContainer } from "./common";
+import { ColumnContainer, fonts, PageTitle, RestrictWidthContainer, Text, RowContainer } from "./common";
+import TabSelect, { TabOption } from "./TabSelect";
 
 const homePageStyle: PageStyle = {
 	backgroundColor: "#ADD8E6",
@@ -10,8 +11,24 @@ const homePageStyle: PageStyle = {
 	buttonColor: "#ADD8E6",
 };
 
+const tabOptions: TabOption[] = [
+	{
+		title: "Sign",
+		index: 0,
+	},
+	{
+		title: "Prove",
+		index: 1,
+	},
+	{
+		title: "Verify",
+		index: 2,
+	},
+];
+
 const Home = () => {
 	const { setPageStyle } = useColor();
+	const [tab, setTab] = useState(0);
 
 	useEffect(() => {
 		setPageStyle(homePageStyle);
@@ -45,6 +62,8 @@ const Home = () => {
 						<p>
 							Why is this useful? Form 1040 aggregates a variety of data submitted to the government. This
 							system could allow:
+						</p>
+						<div>
 							<ul>
 								<li>
 									Public officials to publish verified information from their F1040's that was
@@ -59,21 +78,51 @@ const Home = () => {
 									private information
 								</li>
 							</ul>
-						</p>
+						</div>
+						<div>
 						<p>
 							The system utilizes a zk-snark circuit, which is publicly maintained. The circuit:
+							</p>
 							<ul>
 								<li>Verifies the tax data was signed by a trusted authority</li>
 								<li>Redacts the tax data based on users' input</li>
 								<li>Outputs redacted tax data and a proof that anyone can verify</li>
 							</ul>
-						</p>
+						
 						<p>The system is composed of three separate services.</p>
+						</div>
 						{/* TODO: More on this below in 3 columns */}
 					</div>
-					{/* TODO: Put nice graphic here */}
 				</RowContainer>
 			</RowContainer>
+			<RestrictWidthContainer>
+				<TabSelect
+					options={tabOptions}
+					onChange={(i) => {
+						setTab(i);
+					}}
+				/>{" "}
+				{tab === 0 ? (
+					<ColumnContainer>
+						<Text size={fonts.fontS} style={{ fontWeight: "500" }}>
+							Copy for Sign
+						</Text>
+					</ColumnContainer>
+				) : tab === 1 ? (
+					<ColumnContainer>
+						<Text size={fonts.fontS} style={{ fontWeight: "500" }}>
+							Copy for Prove
+						</Text>
+					</ColumnContainer>
+				) : ( 
+					<ColumnContainer>
+						<Text size={fonts.fontS} style={{ fontWeight: "500" }}>
+							Copy for Verify
+						</Text>
+					</ColumnContainer>
+				)}
+				{/* TODO: Put nice graphic here */}
+			</RestrictWidthContainer>
 		</ColumnContainer>
 	);
 };
