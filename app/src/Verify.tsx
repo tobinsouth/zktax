@@ -118,13 +118,13 @@ const Verify = () => {
 						{pdfInput.length ? (
 							<ColumnContainer>
 								<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 25, marginTop: 20 }}>
-									Redacted IRS 1040
+									Redacted IRS Form 1040
 								</Text>
 								<PDFDisplay taxData={pdfInput} style={{ minHeight: 400 }} />
 							</ColumnContainer>
 						) : null}
 						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 10, marginTop: 20 }}>
-							Proof Details
+							Proof Artifacts
 						</Text>
 						<RowContainer style={{ marginBottom: 5 }}>
 							<ColumnContainer style={{ flex: 1, marginRight: 5 }}>

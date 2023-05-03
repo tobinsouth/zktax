@@ -240,13 +240,13 @@ function Prove() {
 
 	return (
 		<ColumnContainer style={{ paddingBottom: 50, backgroundColor: pageStyle.backgroundColor }}>
-			<PageTitle title="Redact & Prove" subtitle="Pick fields and generate a proof" />
+			<PageTitle title="Redact & Prove" subtitle="Select fields for redaction and generate proof" />
 			<RestrictWidthContainer>
 				{/* We should also have a json upload option */}
 				{proof.length > 0 && signals.length > 0 ? (
 					<ColumnContainer>
 						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 10, marginTop: 40 }}>
-							My Proof Artifacts
+							Proof Artifacts
 						</Text>
 						<RowContainer>
 							<ColumnContainer style={{ marginRight: 10, flex: 1 }}>
@@ -296,7 +296,7 @@ function Prove() {
 				) : showRedactTable ? (
 					<ColumnContainer>
 						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
-							Provided IRS 1040
+							Tax data
 						</Text>
 						<PDFDisplay
 							taxData={JSON.stringify(filterRedactedFields(inputJson, redactKeys))}
@@ -311,7 +311,7 @@ function Prove() {
 				) : (
 					<ColumnContainer>
 						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 10, marginTop: 20 }}>
-							Signed Witness Inputed
+							Input signed tax data (ZK proof "witness")
 						</Text>
 						<JSONDisplay
 							taxData={inputJsonOfEverything}
