@@ -2,12 +2,21 @@ import React, { useState, ChangeEvent, useEffect } from "react";
 import { MAX_JSON_SIZE, safelyParseJSON, toAsciiArray } from "./utilities/jsonUtils";
 import "./App.css";
 import { PageStyle } from "./App";
-import { Button, ColumnContainer, fonts, PageTitle, RestrictWidthContainer, RowContainer, Text } from "./common";
+import {
+	Button,
+	ColumnContainer,
+	Divider,
+	fonts,
+	PageTitle,
+	RestrictWidthContainer,
+	RowContainer,
+	Text,
+} from "./common";
 import { hashAndSignEddsaMiMC } from "./utilities/cryptoUtils";
 import { pdfToJSON } from "./utilities/f1040";
 import { useColor } from "./ColorContext";
 import PDFDisplay from "./PDFDisplay";
-import JSONDisplay from "./JSONDisplay";
+import JSONDisplay, { ArrayDisplay } from "./JSONDisplay";
 
 // const { buildBabyjub, buildMimc7, buildEddsa } = require("circomlibjs");
 
@@ -119,7 +128,6 @@ const Sign = () => {
 					paddingBottom: 10,
 					borderRadius: 0,
 					alignItems: "center",
-					borderBottom: "2px solid white",
 					marginBottom: 20,
 				}}>
 				<RestrictWidthContainer>
@@ -170,6 +178,7 @@ const Sign = () => {
 							/f1040/f1040-2020-trump.pdf
 						</a>
 					</Text>
+					<Divider style={{ marginTop: 20 }} />
 				</RestrictWidthContainer>
 			</RowContainer>
 			<RestrictWidthContainer>
@@ -181,7 +190,7 @@ const Sign = () => {
 					</ColumnContainer>
 				) : signedTaxData.length === 0 ? (
 					<ColumnContainer>
-						<Text size={fonts.fontS} style={{ color: pageStyle.textColor }}>
+						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
 							Trusted Tax Service Public Key (
 							<a
 								style={{ color: pageStyle.textColor }}
@@ -190,9 +199,12 @@ const Sign = () => {
 							</a>
 							)
 						</Text>
-						<pre>
-							["5602421584708175181046807257310257387379311773690155958487101805560296232204","5602421584708175181046807257310257387379311773690155958487101805560296232204"]
-						</pre>
+						<ArrayDisplay
+							content={[
+								"5602421584708175181046807257310257387379311773690155958487101805560296232204",
+								"5602421584708175181046807257310257387379311773690155958487101805560296232204",
+							]}
+						/>
 						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
 							Insert Form 1040
 						</Text>

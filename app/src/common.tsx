@@ -89,3 +89,8 @@ export const Button = (props: { title: string; onClick: () => void; style?: any 
 		</button>
 	);
 };
+
+export const Divider = (props: { style?: any }) => {
+	const { pageStyle } = useColor();
+	return <div style={{ height: 2, backgroundColor: pageStyle.textColor, ...props.style }} />;
+};
