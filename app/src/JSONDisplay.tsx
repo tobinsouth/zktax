@@ -20,7 +20,6 @@ const JSONDisplay = (props: {
 				height: 300,
 				backgroundColor: pageStyle.altBackgroundColor,
 				...props.style,
-				color: pageStyle.textColor,
 			}}
 			onChange={(event) => {
 				try {

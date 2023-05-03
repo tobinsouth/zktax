@@ -253,19 +253,37 @@ function Prove() {
 								<Text size={fonts.fontS} style={{ fontWeight: "700", marginBottom: 3 }}>
 									Proof
 								</Text>
-								<JSONDisplay taxData={proof} onChange={() => {}} disabled default="" />
+								<JSONDisplay
+									taxData={proof}
+									onChange={() => {}}
+									disabled
+									default=""
+									style={{ color: pageStyle.textColor }}
+								/>
 							</ColumnContainer>
 							<ColumnContainer style={{ marginRight: 10, flex: 1 }}>
 								<Text size={fonts.fontS} style={{ fontWeight: "700", marginBottom: 3 }}>
 									Signals
 								</Text>
-								<JSONDisplay taxData={signals} onChange={() => {}} disabled default="" />
+								<JSONDisplay
+									taxData={signals}
+									onChange={() => {}}
+									disabled
+									default=""
+									style={{ color: pageStyle.textColor }}
+								/>
 							</ColumnContainer>
 							<ColumnContainer style={{ flex: 1 }}>
 								<Text size={fonts.fontS} style={{ fontWeight: "700", marginBottom: 3 }}>
 									Redacted JSON
 								</Text>
-								<JSONDisplay taxData={redactedJson} onChange={() => {}} disabled default="" />
+								<JSONDisplay
+									taxData={redactedJson}
+									onChange={() => {}}
+									disabled
+									default=""
+									style={{ color: pageStyle.textColor }}
+								/>
 							</ColumnContainer>
 						</RowContainer>
 
@@ -299,6 +317,7 @@ function Prove() {
 							taxData={inputJsonOfEverything}
 							onChange={setInputJsonOfEverything}
 							default="Enter tax data JSON..."
+							style={{ color: pageStyle.textColor }}
 						/>
 						<Button title="Select Redaction" onClick={processInput} />
 					</ColumnContainer>
