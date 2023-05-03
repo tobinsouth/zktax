@@ -3,10 +3,12 @@ import { PageStyle } from "./App";
 import { Button, ColumnContainer, fonts, PageTitle, RestrictWidthContainer, RowContainer, Text } from "./common";
 import "./App.css";
 import { useColor } from "./ColorContext";
+import { signalsArrayToJSON } from "./utilities/jsonUtils";
+import PDFDisplay from "./PDFDisplay";
 const snarkjs = require("snarkjs");
 
 const verifyPageStyle: PageStyle = {
-	backgroundColor: "#f8f8f8",
+	backgroundColor: "#eaeaea",
 	textColor: "#161616",
 	altBackgroundColor: "#eaeaea",
 	buttonColor: "#ADD8E6",
@@ -27,6 +29,7 @@ const verifyProof = async (_verificationkey: string, signals: any, proof: any) =
 
 const Verify = () => {
 	const [proof, setProof] = useState("");
+	const [pdfInput, setPDFInput] = useState("");
 	const [signals, setSignals] = useState("");
 	const [isValid, setIsValid] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -79,6 +82,7 @@ const Verify = () => {
 			reader.onload = () => {
 				if (typeof reader.result === "string") {
 					setSignals(reader.result);
+					setPDFInput(signalsArrayToJSON(reader.result));
 				} else {
 					console.log("Error reading proof file", reader.result);
 				}
@@ -111,6 +115,14 @@ const Verify = () => {
 					</ColumnContainer>
 				) : (
 					<ColumnContainer>
+						{pdfInput.length ? (
+							<ColumnContainer>
+								<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 25, marginTop: 20 }}>
+									Redacted IRS 1040
+								</Text>
+								<PDFDisplay taxData={pdfInput} style={{ minHeight: 400 }} />
+							</ColumnContainer>
+						) : null}
 						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 10, marginTop: 20 }}>
 							Proof Details
 						</Text>

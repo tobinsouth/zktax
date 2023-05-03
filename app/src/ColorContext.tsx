@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { PageStyle } from "./App";
 
 interface IColorContext {
@@ -9,7 +9,7 @@ interface IColorContext {
 const defaultColorContext = {
 	pageStyle: {
 		backgroundColor: "#ADD8E6",
-		textColor: "#f8f8f8",
+		textColor: "#eaeaea",
 		altBackgroundColor: "#161616",
 		buttonColor: "#ADD8E6",
 	},
