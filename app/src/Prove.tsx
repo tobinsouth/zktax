@@ -9,7 +9,7 @@ const snarkjs = require("snarkjs");
 
 const provePageStyle: PageStyle = {
 	backgroundColor: "#161616",
-	textColor: "#f8f8f8",
+	textColor: "#eaeaea",
 	altBackgroundColor: "#333333",
 	buttonColor: "#ADD8E6",
 };

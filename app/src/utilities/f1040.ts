@@ -95,12 +95,12 @@ export function getReverseFieldNamesMap() {
 	return reverseFieldnamesMap;
 }
 
-function printFieldNamesMap(fnamesMap: any) {
-	console.log("FieldNamesMap");
-	let s = "";
-	for (var key in fnamesMap) {
-		let val = fnamesMap[key];
-		s += '"' + key + '":"' + val + '",' + "\n";
-	}
-	console.log(s);
-}
+// function printFieldNamesMap(fnamesMap: any) {
+// 	console.log("FieldNamesMap");
+// 	let s = "";
+// 	for (var key in fnamesMap) {
+// 		let val = fnamesMap[key];
+// 		s += '"' + key + '":"' + val + '",' + "\n";
+// 	}
+// 	console.log(s);
+// }

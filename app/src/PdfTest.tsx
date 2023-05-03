@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
 import { PDFDocument } from "pdf-lib";
 
-import { pdfToJSON, updatePdfForm } from "./utilities/f1040";
+import { updatePdfForm } from "./utilities/f1040";
 
 export const testTrumpTaxJson = "/f1040/f1040-2020-trump.json";
 
@@ -23,7 +23,7 @@ export default function PDFTest() {
 		// empty example form from IRS
 		const formUrl = "http://localhost:3000/f1040/f1040-2020-empty.pdf";
 		const formPdfBytes = await fetch(formUrl).then((res) => res.arrayBuffer());
-		const json1040 = await pdfToJSON(formPdfBytes);
+		// const json1040 = await pdfToJSON(formPdfBytes);
 		// to doc
 		const doc = await PDFDocument.load(formPdfBytes);
 		updatePdf(doc);
@@ -47,7 +47,7 @@ export default function PDFTest() {
 		}
 		const file = fileInput.files[0];
 		const fBytes = await file.arrayBuffer();
-		const json1040 = await pdfToJSON(fBytes);
+		// const json1040 = await pdfToJSON(fBytes);
 		const doc = await PDFDocument.load(fBytes);
 		updatePdf(doc);
 	}
@@ -67,7 +67,7 @@ export default function PDFTest() {
 					</button>
 				</div>
 				<div style={{ height: 400 }}>
-					<iframe src={pdfDataUri} id="pdf" style={{ width: 800, height: "100%" }}></iframe>
+					<iframe title="testPdf" src={pdfDataUri} id="pdf" style={{ width: 800, height: "100%" }}></iframe>
 				</div>
 			</div>
 		</>

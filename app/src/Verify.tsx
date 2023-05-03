@@ -8,7 +8,7 @@ import PDFDisplay from "./PDFDisplay";
 const snarkjs = require("snarkjs");
 
 const verifyPageStyle: PageStyle = {
-	backgroundColor: "#f8f8f8",
+	backgroundColor: "#eaeaea",
 	textColor: "#161616",
 	altBackgroundColor: "#eaeaea",
 	buttonColor: "#ADD8E6",

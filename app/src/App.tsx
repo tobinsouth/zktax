@@ -4,7 +4,7 @@ import Prove from "./Prove";
 import Verify from "./Verify";
 import PdfTest from "./PdfTest";
 import styled from "styled-components";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import Home from "./Home";
 import Header from "./Header";

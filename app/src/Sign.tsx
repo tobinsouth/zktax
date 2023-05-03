@@ -9,11 +9,11 @@ import { useColor } from "./ColorContext";
 import PDFDisplay from "./PDFDisplay";
 import JSONDisplay from "./JSONDisplay";
 
-const { buildBabyjub, buildMimc7, buildEddsa } = require("circomlibjs");
+// const { buildBabyjub, buildMimc7, buildEddsa } = require("circomlibjs");
 
 const signPageStyle: PageStyle = {
 	backgroundColor: "#00599c",
-	textColor: "#f8f8f8",
+	textColor: "#eaeaea",
 	altBackgroundColor: "#eaeaea",
 	buttonColor: "#add8e6",
 };
@@ -151,14 +151,22 @@ const Sign = () => {
 					<br />
 					<Text size={fonts.fontS}>
 						An empty form can be downloaded from the IRS to be filled out and inserted below:
-						<a href="https://www.irs.gov/pub/irs-prior/f1040--2020.pdf" target="_blank">
+						<a
+							href="https://www.irs.gov/pub/irs-prior/f1040--2020.pdf"
+							target="_blank"
+							rel="noreferrer"
+							style={{ color: "#ADD8E6", marginLeft: 4 }}>
 							https://www.irs.gov/pub/irs-prior/f1040--2020.pdf
 						</a>
 					</Text>
 					<Text size={fonts.fontS}>
 						Or use this filled out version from a public official who was recently compelled to publish
 						their 2020 form 1040:
-						<a href="/f1040/f1040-2020-trump.pdf" target="_blank">
+						<a
+							href="/f1040/f1040-2020-trump.pdf"
+							target="_blank"
+							rel="noreferrer"
+							style={{ color: "#ADD8E6", marginLeft: 4 }}>
 							/f1040/f1040-2020-trump.pdf
 						</a>
 					</Text>
@@ -173,11 +181,10 @@ const Sign = () => {
 					</ColumnContainer>
 				) : signedTaxData.length === 0 ? (
 					<ColumnContainer>
-						\{" "}
-						<Text size={fonts.fontS} style={{ color: "white" }}>
-							Trusted Tax Service public key (
+						<Text size={fonts.fontS} style={{ color: pageStyle.textColor }}>
+							Trusted Tax Service Public Key (
 							<a
-								style={{ color: "white" }}
+								style={{ color: pageStyle.textColor }}
 								href="https://iden3-docs.readthedocs.io/en/latest/_downloads/a04267077fb3fdbf2b608e014706e004/Ed-DSA.pdf">
 								EdDSA/MIMC-7
 							</a>

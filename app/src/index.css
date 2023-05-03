@@ -16,7 +16,7 @@ code {
 .link:hover {
 	text-decoration: underline;
 	cursor: pointer;
-	text-decoration-color: #f8f8f8;
+	text-decoration-color: #eaeaea;
 	text-underline-offset: 1.5px;
 	text-decoration-thickness: 1.5px;
 }

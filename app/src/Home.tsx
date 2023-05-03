@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { PageStyle } from "./App";
 import { useColor } from "./ColorContext";
-import { ColumnContainer, PageTitle, RowContainer, Text } from "./common";
+import { ColumnContainer, PageTitle, RowContainer } from "./common";
 
 const homePageStyle: PageStyle = {
 	backgroundColor: "#ADD8E6",
-	textColor: "#f8f8f8",
+	textColor: "#eaeaea",
 	altBackgroundColor: "#161616",
 	buttonColor: "#ADD8E6",
 };
