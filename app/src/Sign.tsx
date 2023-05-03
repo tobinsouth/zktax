@@ -111,7 +111,59 @@ const Sign = () => {
 
 	return (
 		<ColumnContainer style={{ paddingBottom: 50, backgroundColor: pageStyle.backgroundColor }}>
-			<PageTitle title="Sign" subtitle="Get your tax info sign by authority" />
+			<PageTitle title="Trusted Tax Service" subtitle="" />
+			<RowContainer
+				style={{
+					justifyContent: "space-around",
+					paddingTop: 10,
+					paddingBottom: 10,
+					borderRadius: 0,
+					alignItems: "center",
+					borderBottom: "2px solid white",
+					marginBottom: 20,
+				}}>
+				<RestrictWidthContainer>
+					<Text size={fonts.fontS}>
+						This page represents a hypothetical service provided by a trusted tax authority that already
+						collects individuals' tax records. E.g. the IRS in the United States.
+					</Text>
+					<Text size={fonts.fontS}>
+						This prototype is meant to show that while this service does not currently exist, it could.
+					</Text>
+					<Text size={fonts.fontS}>
+						Tax data are often stored in PDF format, and can be converted into other common formats such as
+						JSON.
+					</Text>
+					<Text size={fonts.fontS}>
+						This service uses public key cryptography to sign individuals' tax data, which individuals can
+						then download as JSON.
+					</Text>
+					<Text size={fonts.fontS}>The Trusted Tax Service's public key is public.</Text>
+					<Text size={fonts.fontS}>The downloaded data is private.</Text>
+					<br />
+					<Text size={fonts.fontS}>
+						In this demo, instead of users automatically downloading their tax data, users provide tax data
+						to then be signed and output by the service.
+					</Text>
+					<Text size={fonts.fontS}>
+						This example uses the 2020 version of US income tax return form 1040.
+					</Text>
+					<br />
+					<Text size={fonts.fontS}>
+						An empty form can be downloaded from the IRS to be filled out and inserted below:
+						<a href="https://www.irs.gov/pub/irs-prior/f1040--2020.pdf" target="_blank">
+							https://www.irs.gov/pub/irs-prior/f1040--2020.pdf
+						</a>
+					</Text>
+					<Text size={fonts.fontS}>
+						Or use this filled out version from a public official who was recently compelled to publish
+						their 2020 form 1040:
+						<a href="/f1040/f1040-2020-trump.pdf" target="_blank">
+							/f1040/f1040-2020-trump.pdf
+						</a>
+					</Text>
+				</RestrictWidthContainer>
+			</RowContainer>
 			<RestrictWidthContainer>
 				{signing ? (
 					<ColumnContainer>
@@ -121,8 +173,21 @@ const Sign = () => {
 					</ColumnContainer>
 				) : signedTaxData.length === 0 ? (
 					<ColumnContainer>
+						\{" "}
+						<Text size={fonts.fontS} style={{ color: "white" }}>
+							Trusted Tax Service public key (
+							<a
+								style={{ color: "white" }}
+								href="https://iden3-docs.readthedocs.io/en/latest/_downloads/a04267077fb3fdbf2b608e014706e004/Ed-DSA.pdf">
+								EdDSA/MIMC-7
+							</a>
+							)
+						</Text>
+						<pre>
+							["5602421584708175181046807257310257387379311773690155958487101805560296232204","5602421584708175181046807257310257387379311773690155958487101805560296232204"]
+						</pre>
 						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
-							Upload Tax Data
+							Insert Form 1040
 						</Text>
 						<input
 							id="dropzone-file"
@@ -134,7 +199,7 @@ const Sign = () => {
 						<RowContainer>
 							<ColumnContainer style={{ flex: 1, marginRight: 10 }}>
 								<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
-									Example IRS 1040
+									JSON Form Data
 								</Text>
 								<PDFDisplay taxData={inputJson} style={{ flex: 1, minHeight: 400 }} />
 							</ColumnContainer>
@@ -155,7 +220,7 @@ const Sign = () => {
 				) : (
 					<ColumnContainer style={{ marginTop: 20, marginBottom: 20 }}>
 						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
-							My Signed Tax Data
+							Signed Tax Data
 						</Text>
 						<JSONDisplay
 							taxData={signedTaxData}
