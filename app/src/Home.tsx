@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { PageStyle } from "./App";
 import { useColor } from "./ColorContext";
-import { ColumnContainer, PageTitle } from "./common";
+import { ColumnContainer, fonts, PageTitle, RestrictWidthContainer, Text } from "./common";
+import TabSelect, { TabOption } from "./TabSelect";
 
 const homePageStyle: PageStyle = {
 	backgroundColor: "#ADD8E6",
@@ -10,8 +11,24 @@ const homePageStyle: PageStyle = {
 	buttonColor: "#ADD8E6",
 };
 
+const tabOptions: TabOption[] = [
+	{
+		title: "Sign",
+		index: 0,
+	},
+	{
+		title: "Prove",
+		index: 1,
+	},
+	{
+		title: "Verify",
+		index: 2,
+	},
+];
+
 const Home = () => {
 	const { setPageStyle } = useColor();
+	const [tab, setTab] = useState(0);
 
 	useEffect(() => {
 		setPageStyle(homePageStyle);
@@ -20,7 +37,33 @@ const Home = () => {
 	return (
 		<ColumnContainer>
 			<PageTitle title="zkTaxes" subtitle="Verifiable tax details with identity security" />
-			{/* TODO: Put nice graphic here */}
+			<RestrictWidthContainer>
+				<TabSelect
+					options={tabOptions}
+					onChange={(i) => {
+						setTab(i);
+					}}
+				/>{" "}
+				{tab === 0 ? (
+					<ColumnContainer>
+						<Text size={fonts.fontS} style={{ fontWeight: "500" }}>
+							Copy for Sign
+						</Text>
+					</ColumnContainer>
+				) : tab === 1 ? (
+					<ColumnContainer>
+						<Text size={fonts.fontS} style={{ fontWeight: "500" }}>
+							Copy for Prove
+						</Text>
+					</ColumnContainer>
+				) : (
+					<ColumnContainer>
+						<Text size={fonts.fontS} style={{ fontWeight: "500" }}>
+							Copy for Verify
+						</Text>
+					</ColumnContainer>
+				)}
+			</RestrictWidthContainer>
 		</ColumnContainer>
 	);
 };
