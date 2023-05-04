@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { PageStyle } from "./App";
 import { useColor } from "./ColorContext";
 import { ColumnContainer, fonts, PageTitle, RestrictWidthContainer, Text, RowContainer } from "./common";
-import TabSelect, { TabOption } from "./TabSelect";
+// import TabSelect, { TabOption } from "./TabSelect";
 
 const homePageStyle: PageStyle = {
 	backgroundColor: "#ADD8E6",
@@ -11,20 +11,20 @@ const homePageStyle: PageStyle = {
 	buttonColor: "#ADD8E6",
 };
 
-const tabOptions: TabOption[] = [
-	{
-		title: "Sign",
-		index: 0,
-	},
-	{
-		title: "Prove",
-		index: 1,
-	},
-	{
-		title: "Verify",
-		index: 2,
-	},
-];
+// const tabOptions: TabOption[] = [
+// 	{
+// 		title: "Sign",
+// 		index: 0,
+// 	},
+// 	{
+// 		title: "Prove",
+// 		index: 1,
+// 	},
+// 	{
+// 		title: "Verify",
+// 		index: 2,
+// 	},
+// ];
 
 const Home = () => {
 	const { setPageStyle } = useColor();
@@ -94,31 +94,23 @@ const Home = () => {
 				</RowContainer>
 			</RowContainer>
 			<RestrictWidthContainer>
-				<TabSelect
-					options={tabOptions}
-					onChange={(i) => {
-						setTab(i);
-					}}
-				/>{" "}
-				{tab === 0 ? (
-					<ColumnContainer>
+				<RowContainer style={{ width: "100%", marginBottom: 40 }}>
+					<ColumnContainer style={{ flex: 1, marginRight: 10 }}>
 						<Text size={fonts.fontS} style={{ fontWeight: "500" }}>
 							Copy for Sign
 						</Text>
 					</ColumnContainer>
-				) : tab === 1 ? (
-					<ColumnContainer>
+					<ColumnContainer style={{ flex: 1, marginRight: 10 }}>
 						<Text size={fonts.fontS} style={{ fontWeight: "500" }}>
 							Copy for Prove
 						</Text>
 					</ColumnContainer>
-				) : (
-					<ColumnContainer>
+					<ColumnContainer style={{ flex: 1, marginRight: 10 }}>
 						<Text size={fonts.fontS} style={{ fontWeight: "500" }}>
 							Copy for Verify
 						</Text>
 					</ColumnContainer>
-				)}
+				</RowContainer>
 				{/* TODO: Put nice graphic here */}
 			</RestrictWidthContainer>
 		</ColumnContainer>
