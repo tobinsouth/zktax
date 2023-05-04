@@ -1,27 +1,37 @@
-// @ts-nocheck
 import React, { useState, ChangeEvent, useEffect } from "react";
-import { MAX_JSON_SIZE, toAsciiArray } from "./utilities/jsonUtils";
+import { MAX_JSON_SIZE, safelyParseJSON, toAsciiArray } from "./utilities/jsonUtils";
 import "./App.css";
 import { PageStyle } from "./App";
-import { Button, ColumnContainer, fonts, PageTitle, RestrictWidthContainer, RowContainer, Text } from "./common";
+import {
+	Button,
+	ColumnContainer,
+	Divider,
+	fonts,
+	PageTitle,
+	RestrictWidthContainer,
+	RowContainer,
+	Text,
+} from "./common";
 import { hashAndSignEddsaMiMC } from "./utilities/cryptoUtils";
-import { empty1040src, pdfToJSON } from "./utilities/f1040";
+import { pdfToJSON } from "./utilities/f1040";
 import { useColor } from "./ColorContext";
+import PDFDisplay from "./PDFDisplay";
+import JSONDisplay, { ArrayDisplay } from "./JSONDisplay";
 
-const { buildBabyjub, buildMimc7, buildEddsa } = require("circomlibjs");
+// const { buildBabyjub, buildMimc7, buildEddsa } = require("circomlibjs");
 
 const signPageStyle: PageStyle = {
 	backgroundColor: "#00599c",
-	textColor: "#f8f8f8",
+	textColor: "#eaeaea",
 	altBackgroundColor: "#eaeaea",
 	buttonColor: "#add8e6",
 };
 
 const Sign = () => {
-	// const [inputJson, setInputJson] = useState<string>(`{"SSN": "000-00-0000", "fname": "DONALD J", "lname": "TRUMP", "address_state": "FL", "f_1": "393,229", "f_2a": "2,208", "f_2b": "10,626,179", "f_3a": "17,694","f_3b": "25,347","f_4a": "","f_4b": "","f_5a": "","f_5b": "86,532","f_6a": "","f_6b": "", "f_7": "", "f_8": "-15,825,345", "f_9": "-4,694,058", "f_10a": "101,699","f_10b": "","f_10c": "101,699","f_11": "-4,795,757","f_12": "915,171","f_13": "", "f_14": "915,171","f_15": "0","f_16": "0","f_17": "","f_18": "0","f_19": "","f_20": "","f_21": "","f_22": "0","f_23": "271,973","f_24": "271,973","f_25a": "83,915","f_25b": "","f_25c": "1,733","f_25d": "85,649","f_26": "13,635,520","f_27": "","f_28": "","f_29": "","f_30": "","f_31": "19,397","f_32": "19,397","f_33": "13,740,566","f_34": "13,468,593","f_35a": "","f_35b": "000000000","f_35c": "checking","f_35d": "00000000000000000","f_36": "8,000,000","f_37": "","year": "2020","form": "1040"}`);
-	// const [inputJson, setInputJson] = useState<string>(`{"beans":"great"}`);
 	const [inputJson, setInputJson] = useState<string>("");
+	// const [actualJson, setActualJson] = useState<Map<string, string>>(new Map());
 	const [signedTaxData, setSignedTaxData] = useState("");
+	const [signing, setSigning] = useState(false);
 
 	const { pageStyle, setPageStyle } = useColor();
 
@@ -41,24 +51,29 @@ const Sign = () => {
 		const file = fileInput.files[0];
 		const fBytes = await file.arrayBuffer();
 		const json1040 = await pdfToJSON(fBytes);
-		console.log(json1040);
-		setInputJson(JSON.stringify(json1040));
+		setInputJson(JSON.stringify(Object.fromEntries(json1040)));
 	}
 
-	const filterJsonKeysByValue = (jsonObj: Map<string, string>) => {
+	const filterJsonKeysByValue = (jsonObj: Map<string, string>): Map<string, string> => {
 		// Filter the JSON object to only include keys with a non-empty value
-		return Object.keys(jsonObj).reduce((p, c) => {
-			if (jsonObj[c].length > 0) p[c] = jsonObj[c];
-			return p;
-		}, {});
+		console.log(jsonObj);
+		const p = new Map<string, string>();
+		jsonObj.forEach((v, k) => {
+			if (v.length > 0) {
+				p.set(k, v);
+			}
+		});
+		return p;
 	};
 
 	const handleSign = async () => {
-		let parsedJsonObj = JSON.parse(inputJson);
-		parsedJsonObj = filterJsonKeysByValue(parsedJsonObj);
+		setSigning(true);
+		const reJSON: Map<string, string> = new Map(Object.entries(safelyParseJSON(inputJson)));
+		const parsedJsonObj = filterJsonKeysByValue(reJSON);
 		console.log("filtered JSON");
 		console.log(filterJsonKeysByValue(parsedJsonObj));
-		const parsedJson = JSON.stringify(parsedJsonObj);
+		const parsedJson = JSON.stringify(Object.fromEntries(parsedJsonObj));
+
 		if (parsedJson.length > MAX_JSON_SIZE) {
 			console.error(
 				"Cannot handle json: too large. Max size:",
@@ -66,6 +81,7 @@ const Sign = () => {
 				"Json array size:",
 				parsedJson.length,
 			);
+			setSigning(false);
 			return false;
 		}
 
@@ -83,6 +99,7 @@ const Sign = () => {
 		};
 		console.log("Inputs", JSON.stringify(inputs));
 		setSignedTaxData(JSON.stringify(inputs));
+		setSigning(false);
 	};
 
 	const handleDownload = () => {
@@ -96,26 +113,100 @@ const Sign = () => {
 	};
 
 	const handleCopyToClipboard = () => {
-		navigator.clipboard.writeText(signedTaxData);
-		alert("JSON copied to clipboard");
+		navigator.clipboard.writeText(signedTaxData).then(() => {
+			alert("JSON copied to clipboard");
+		});
 	};
 
 	return (
 		<ColumnContainer style={{ paddingBottom: 50, backgroundColor: pageStyle.backgroundColor }}>
-			<PageTitle title="Sign" subtitle="Get your tax info sign by authority" />
+			<PageTitle title="Trusted Tax Service" subtitle="" />
+			<RowContainer
+				style={{
+					justifyContent: "space-around",
+					paddingTop: 10,
+					paddingBottom: 10,
+					borderRadius: 0,
+					alignItems: "center",
+					marginBottom: 20,
+				}}>
+				<RestrictWidthContainer>
+					<Text size={fonts.fontS}>
+						This page represents a hypothetical service provided by a trusted tax authority that already
+						collects individuals' tax records. E.g. the IRS in the United States.
+					</Text>
+					<Text size={fonts.fontS}>
+						This prototype is meant to show that while this service does not currently exist, it could.
+					</Text>
+					<Text size={fonts.fontS}>
+						Tax data are often stored in PDF format, and can be converted into other common formats such as
+						JSON.
+					</Text>
+					<Text size={fonts.fontS}>
+						This service uses public key cryptography to sign individuals' tax data, which individuals can
+						then download as JSON.
+					</Text>
+					<Text size={fonts.fontS}>The Trusted Tax Service's public key is public.</Text>
+					<Text size={fonts.fontS}>The downloaded data is private.</Text>
+					<br />
+					<Text size={fonts.fontS}>
+						In this demo, instead of users automatically downloading their tax data, users provide tax data
+						to then be signed and output by the service.
+					</Text>
+					<Text size={fonts.fontS}>
+						This example uses the 2020 version of US income tax return form 1040.
+					</Text>
+					<br />
+					<Text size={fonts.fontS}>
+						An empty form can be downloaded from the IRS to be filled out and inserted below:
+						<a
+							href="https://www.irs.gov/pub/irs-prior/f1040--2020.pdf"
+							target="_blank"
+							rel="noreferrer"
+							style={{ color: "#ADD8E6", marginLeft: 4 }}>
+							https://www.irs.gov/pub/irs-prior/f1040--2020.pdf
+						</a>
+					</Text>
+					<Text size={fonts.fontS}>
+						Or use this filled out version from a public official who was recently compelled to publish
+						their 2020 form 1040:
+						<a
+							href="/f1040/f1040-2020-trump.pdf"
+							target="_blank"
+							rel="noreferrer"
+							style={{ color: "#ADD8E6", marginLeft: 4 }}>
+							/f1040/f1040-2020-trump.pdf
+						</a>
+					</Text>
+					<Divider style={{ marginTop: 20 }} />
+				</RestrictWidthContainer>
+			</RowContainer>
 			<RestrictWidthContainer>
-				{signedTaxData.length === 0 ? (
+				{signing ? (
 					<ColumnContainer>
-						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 10, marginTop: 20 }}>
-							My 1040
-						</Text>
-						{/* <Text size={fonts.fontM}>Example empty 2020 Form 1040 from the IRS</Text>
-				<a target="_blank" href="https://www.irs.gov/pub/irs-prior/f1040--2020.pdf">
-					https://www.irs.gov/pub/irs-prior/f1040--2020.pdf
-				</a> */}
-						<iframe src={empty1040src} id="pdf" style={{ width: "auto", height: 400 }} scrolling="yes" />
 						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
-							Upload Tax Data
+							Signing tax data...
+						</Text>
+					</ColumnContainer>
+				) : signedTaxData.length === 0 ? (
+					<ColumnContainer>
+						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
+							Trusted Tax Service Public Key (
+							<a
+								style={{ color: pageStyle.textColor }}
+								href="https://iden3-docs.readthedocs.io/en/latest/_downloads/a04267077fb3fdbf2b608e014706e004/Ed-DSA.pdf">
+								EdDSA/MIMC-7
+							</a>
+							)
+						</Text>
+						<ArrayDisplay
+							content={[
+								"5602421584708175181046807257310257387379311773690155958487101805560296232204",
+								"5602421584708175181046807257310257387379311773690155958487101805560296232204",
+							]}
+						/>
+						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
+							Insert Form 1040
 						</Text>
 						<input
 							id="dropzone-file"
@@ -124,30 +215,38 @@ const Sign = () => {
 							onChange={on1040PDF}
 							style={{ backgroundColor: pageStyle.altBackgroundColor }}
 						/>
-						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
-							OR... Enter Tax Data JSON
-						</Text>
-						<textarea
-							value={inputJson}
-							style={{ marginBottom: 10, height: 100 }}
-							onChange={(event) => {
-								setInputJson(event.target.value);
-							}}
-							placeholder="Enter JSON here..."
-						/>
-						<Button title="Get Signed Tax Data" background="#ADD8E6" onClick={handleSign} />
+						<RowContainer>
+							<ColumnContainer style={{ flex: 1, marginRight: 10 }}>
+								<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
+									JSON Form Data
+								</Text>
+								<PDFDisplay taxData={inputJson} style={{ flex: 1, minHeight: 400 }} />
+							</ColumnContainer>
+							<ColumnContainer>
+								<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
+									Tax Data JSON
+								</Text>
+								<JSONDisplay
+									taxData={inputJson}
+									default="Add JSON tax data"
+									onChange={setInputJson}
+									style={{ flex: 1, minWidth: 400 }}
+								/>
+								<Button title="Get Signed Tax Data" onClick={handleSign} />
+							</ColumnContainer>
+						</RowContainer>
 					</ColumnContainer>
 				) : (
 					<ColumnContainer style={{ marginTop: 20, marginBottom: 20 }}>
 						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
-							My Signed Tax Data
+							Signed Tax Data
 						</Text>
-						<ColumnContainer
-							style={{ padding: 10, backgroundColor: pageStyle.altBackgroundColor, borderRadius: 5 }}>
-							<Text size={fonts.fontXXS} style={{ overflowWrap: "anywhere", color: "#161616" }}>
-								{signedTaxData}
-							</Text>
-						</ColumnContainer>
+						<JSONDisplay
+							taxData={signedTaxData}
+							default="Singed tax JSON will appear here"
+							onChange={() => {}}
+							disabled
+						/>
 
 						<RowContainer style={{ marginTop: 10 }}>
 							<Button
