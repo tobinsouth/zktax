@@ -5,6 +5,7 @@ import { PageStyle } from "./App";
 import { useColor } from "./ColorContext";
 import JSONDisplay from "./JSONDisplay";
 import PDFDisplay from "./PDFDisplay";
+import { METADATA_FIELDS } from "./utilities/f1040";
 const snarkjs = require("snarkjs");
 
 const provePageStyle: PageStyle = {
@@ -48,51 +49,55 @@ const RedactTable = (props: { inputJson: any; redactKeys: Array<string>; editRed
 				</Text>
 			</RowContainer>
 			<ColumnContainer style={{ maxHeight: 500, overflow: "scroll" }}>
-				{Object.keys(inputJson).map((key: string, index: any) => {
-					const value = inputJson[key];
-					const checked = redactKeys.includes(key);
-					return (
-						<RowContainer
-							style={{
-								justifyContent: "space-around",
-								paddingTop: 10,
-								paddingBottom: 10,
-								backgroundColor: "#e1e1e1",
-								borderRadius: 5,
-								alignItems: "center",
-								marginTop: index === 0 ? 0 : 8,
-							}}>
-							<RowContainer style={{ width: "33%", justifyContent: "center" }}>
-								<input
-									id="all"
-									type="checkbox"
-									checked={checked}
-									style={{
-										height: 20,
-										width: 20,
-										cursor: "pointer",
-										borderWidth: 2,
-									}}
-									onChange={() => editRedactKey(key)}
-									className="checkbox"
-								/>
-							</RowContainer>
-							<Text size={fonts.fontS} style={{ fontWeight: "300", width: "33%", textAlign: "center" }}>
-								{key}
-							</Text>
-							<Text
-								size={fonts.fontS}
+				{Object.keys(inputJson)
+					.filter((k: string) => !METADATA_FIELDS.includes(k))
+					.map((key: string, index: any) => {
+						const value = inputJson[key];
+						const checked = redactKeys.includes(key);
+						return (
+							<RowContainer
 								style={{
-									fontWeight: "300",
-									width: "33%",
-									textAlign: "center",
-									textDecoration: checked ? "line-through" : "none",
+									justifyContent: "space-around",
+									paddingTop: 10,
+									paddingBottom: 10,
+									backgroundColor: "#e1e1e1",
+									borderRadius: 5,
+									alignItems: "center",
+									marginTop: index === 0 ? 0 : 8,
 								}}>
-								{value}
-							</Text>
-						</RowContainer>
-					);
-				})}
+								<RowContainer style={{ width: "33%", justifyContent: "center" }}>
+									<input
+										id="all"
+										type="checkbox"
+										checked={checked}
+										style={{
+											height: 20,
+											width: 20,
+											cursor: "pointer",
+											borderWidth: 2,
+										}}
+										onChange={() => editRedactKey(key)}
+										className="checkbox"
+									/>
+								</RowContainer>
+								<Text
+									size={fonts.fontS}
+									style={{ fontWeight: "300", width: "33%", textAlign: "center" }}>
+									{key}
+								</Text>
+								<Text
+									size={fonts.fontS}
+									style={{
+										fontWeight: "300",
+										width: "33%",
+										textAlign: "center",
+										textDecoration: checked ? "line-through" : "none",
+									}}>
+									{value}
+								</Text>
+							</RowContainer>
+						);
+					})}
 			</ColumnContainer>
 		</ColumnContainer>
 	);
@@ -245,6 +250,25 @@ function Prove() {
 				{/* We should also have a json upload option */}
 				{proof.length > 0 && signals.length > 0 ? (
 					<ColumnContainer>
+						<RowContainer>
+							<ColumnContainer style={{ flex: 1, marginRight: 10 }}>
+								<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
+									JSON Form Data
+								</Text>
+								<PDFDisplay taxData={redactedJson} style={{ flex: 1, minHeight: 400 }} />
+							</ColumnContainer>
+							<ColumnContainer>
+								<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
+									Tax Data JSON
+								</Text>
+								<JSONDisplay
+									taxData={redactedJson}
+									default="Add JSON tax data"
+									onChange={() => {}}
+									style={{ flex: 1, minWidth: 400 }}
+								/>
+							</ColumnContainer>
+						</RowContainer>
 						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 10, marginTop: 40 }}>
 							My Proof Artifacts
 						</Text>
@@ -267,18 +291,6 @@ function Prove() {
 								</Text>
 								<JSONDisplay
 									taxData={signals}
-									onChange={() => {}}
-									disabled
-									default=""
-									style={{ color: pageStyle.textColor }}
-								/>
-							</ColumnContainer>
-							<ColumnContainer style={{ flex: 1 }}>
-								<Text size={fonts.fontS} style={{ fontWeight: "700", marginBottom: 3 }}>
-									Redacted JSON
-								</Text>
-								<JSONDisplay
-									taxData={redactedJson}
 									onChange={() => {}}
 									disabled
 									default=""
