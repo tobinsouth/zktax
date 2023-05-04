@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { PageStyle } from "./App";
 import { useColor } from "./ColorContext";
-import { ColumnContainer, PageTitle, RowContainer } from "./common";
+import { ColumnContainer, fonts, PageTitle, RestrictWidthContainer, Text, RowContainer } from "./common";
 
 const homePageStyle: PageStyle = {
 	backgroundColor: "#ADD8E6",
@@ -9,6 +9,7 @@ const homePageStyle: PageStyle = {
 	altBackgroundColor: "#161616",
 	buttonColor: "#ADD8E6",
 };
+
 
 const Home = () => {
 	const { setPageStyle } = useColor();
@@ -45,6 +46,8 @@ const Home = () => {
 						<p>
 							Why is this useful? Form 1040 aggregates a variety of data submitted to the government. This
 							system could allow:
+						</p>
+						<div>
 							<ul>
 								<li>
 									Public officials to publish verified information from their F1040's that was
@@ -59,21 +62,60 @@ const Home = () => {
 									private information
 								</li>
 							</ul>
-						</p>
-						<p>
-							The system utilizes a zk-snark circuit, which is publicly maintained. The circuit:
+						</div>
+						<div>
+							<p>The system utilizes a zk-snark circuit, which is publicly maintained. The circuit:</p>
 							<ul>
 								<li>Verifies the tax data was signed by a trusted authority</li>
 								<li>Redacts the tax data based on users' input</li>
 								<li>Outputs redacted tax data and a proof that anyone can verify</li>
 							</ul>
-						</p>
-						<p>The system is composed of three separate services.</p>
-						{/* TODO: More on this below in 3 columns */}
+
+							<p>The system is composed of three separate services.</p>
+						</div>
 					</div>
-					{/* TODO: Put nice graphic here */}
 				</RowContainer>
 			</RowContainer>
+			<RestrictWidthContainer>
+				<RowContainer style={{ width: "100%", marginBottom: 40 }}>
+					<ColumnContainer style={{ flex: 1, marginRight: 10 }}>
+						<h2>Trusted Tax Service</h2>
+						<Text size={fonts.fontS} style={{ fontWeight: "500" }}>
+						
+
+						This service already collects individuals' tax records and is a trusted authority. E.g. the IRS in the United States.
+
+						This service uses private-public key cryptography to sign individuals' tax data, which individuals can then download as JSON. 
+						The Trusted Tax Service's public key is public.
+						The downloaded data is private.
+
+						</Text>
+						<a href="/sign"><button>Go to Trusted Tax Service</button></a>
+					</ColumnContainer>
+					<ColumnContainer style={{ flex: 1, marginRight: 10 }}>
+						<h2>Redact and Prove Service</h2>
+						<Text size={fonts.fontS} style={{ fontWeight: "500" }}>
+						
+
+Users take their downloaded tax data from the Trusted Tax Service to the Redact and Prove Service.
+The tax data are still private.
+
+Users select which tax fields are to be redacted (e.g. SSN, address, etc).
+The tax fields selected for redaction are provided as input along with the signed tax data to the zk-snark circuit.
+The circuit verifies the signature, redacts the data, and outputs a proof with the redacted version of the tax data.
+The outputs (proof data and redacted tax data) can be made public.
+
+						</Text>
+					</ColumnContainer>
+					<ColumnContainer style={{ flex: 1, marginRight: 10 }}>
+						<Text size={fonts.fontS} style={{ fontWeight: "500" }}>
+						Anyone can verify the redacted tax data by using the verify service. The verify service uses the zk-snark circuit to verify the proof data matches the redacted tax data.
+						</Text>
+					</ColumnContainer>
+				</RowContainer>
+				<img style={{width: "100%", height: 400, backgroundColor: "white", border: "1px solid black", margin: 30}}></img>
+				{/* TODO: Put nice graphic here */}
+			</RestrictWidthContainer>
 		</ColumnContainer>
 	);
 };
