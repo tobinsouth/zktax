@@ -40,4 +40,10 @@ Every time we edit something to test the deployment, we do it locally, run yarn 
 
 e.g. `rsync -azrhP build tsouth@zktax.media.mit.edu:/var/www/html/zktax/build`
 
+```
+git pull
+yarn build
+rsync -azrhP build tsouth@zktax.media.mit.edu:/var/www/html/zktax/
+```
+
 Move the react app code into `/var/www/html/reactapp`, run `npm run build`, then `sudo service nginx restart`.
