@@ -90,7 +90,7 @@ const Home = () => {
 						The downloaded data is private.
 
 						</Text>
-						<a href="/sign"><button>Go to Trusted Tax Service</button></a>
+						<a href="/sign" target="_blank"><button>Go to Trusted Tax Service</button></a>
 					</ColumnContainer>
 					<ColumnContainer style={{ flex: 1, marginRight: 10 }}>
 						<h2>Redact and Prove Service</h2>
@@ -106,11 +106,14 @@ The circuit verifies the signature, redacts the data, and outputs a proof with t
 The outputs (proof data and redacted tax data) can be made public.
 
 						</Text>
+						<a href="/prove" target="_blank"><button>Go to Redact and Prove Service</button></a>
 					</ColumnContainer>
 					<ColumnContainer style={{ flex: 1, marginRight: 10 }}>
+						<h2>Verify Service</h2>
 						<Text size={fonts.fontS} style={{ fontWeight: "500" }}>
 						Anyone can verify the redacted tax data by using the verify service. The verify service uses the zk-snark circuit to verify the proof data matches the redacted tax data.
 						</Text>
+						<a href="/verify" target="_blank"><button>Go to Verify Service</button></a>
 					</ColumnContainer>
 				</RowContainer>
 				<img style={{width: "100%", height: 400, backgroundColor: "white", border: "1px solid black", margin: 30}}></img>
