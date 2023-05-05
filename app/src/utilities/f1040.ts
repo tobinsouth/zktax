@@ -21,7 +21,7 @@ const YEAR_KEY = "year";
 const FORMNAME_KEY = "form";
 export const METADATA_FIELDS = [YEAR_KEY, FORMNAME_KEY];
 
-export const empty1040src = "/f1040/f1040-2020-empty.pdf";
+export const emptyf1040 = "/f1040/f1040-2020-empty.pdf";
 
 export async function pdfToJSON(fBytes: ArrayBuffer) {
 	const json: Map<string, string> = new Map<string, string>(); // {};
