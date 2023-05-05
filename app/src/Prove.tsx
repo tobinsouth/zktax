@@ -8,6 +8,20 @@ import PDFDisplay from "./PDFDisplay";
 import { METADATA_FIELDS } from "./utilities/f1040";
 const snarkjs = require("snarkjs");
 
+// The circuit files are compiled for different MAX_JSON_SIZE's 
+// Where larger JSON means a larger circuit, hence larger files. 
+// The large files used for the demo (>= 1500) are not committed to git. 
+// The smaller files are. 
+// Update which file and MAX_JSON_SIZE are used to match.
+// const wasmFile = "/zkproof/circuit25.wasm";
+// const zkeyFile = "/zkproof/circuit25.zkey";
+// const wasmFile = "/zkproof/circuit100.wasm";
+// const zkeyFile = "/zkproof/circuit100.zkey";
+const wasmFile = "/zkproof/circuit1500.wasm";
+const zkeyFile = "/zkproof/circuit1500.zkey";
+// const wasmFile = "/zkproof/circuit2000.wasm";
+// const zkeyFile = "/zkproof/circuit2000.zkey";
+
 const provePageStyle: PageStyle = {
 	backgroundColor: "#161616",
 	textColor: "#eaeaea",
@@ -126,17 +140,6 @@ function Prove() {
 		setShowRedactTable(Object.keys(inputJson).length > 0);
 	}, [inputJson]);
 
-	//let wasmFile = "http://localhost:8000/circuit25.wasm";
-	// let zkeyFile = "http://localhost:8000/circuit25.zkey";
-	// let wasmFile = "http://localhost:8000/circuit100.wasm";
-	// let zkeyFile = "http://localhost:8000/circuit100.zkey";
-	// let wasmFile = "http://localhost:8000/circuit1000.wasm";
-	// let zkeyFile = "http://localhost:8000/circuit1000.zkey";
-	let wasmFile = "http://localhost:8000/circuit1500.wasm";
-	let zkeyFile = "http://localhost:8000/circuit1500.zkey";
-	// let wasmFile = "http://localhost:8000/circuit2000.wasm";
-	// let zkeyFile = "http://localhost:8000/circuit2000.zkey";
-
 	const processInput = () => {
 		try {
 			let input = safelyParseJSON(inputJsonOfEverything);
@@ -205,8 +208,6 @@ function Prove() {
 		}
 
 		proofInput["redact_map"] = _redactMap;
-		console.log("redact_map");
-		console.log(JSON.stringify(_redactMap));
 		console.log("Proof input", proofInput);
 		console.log(JSON.stringify(proofInput));
 
@@ -218,7 +219,6 @@ function Prove() {
 	};
 
 	useEffect(() => {
-		console.log("Signals", signals);
 		setRedactedJson(signalsArrayToJSON(signals));
 	}, [signals]);
 

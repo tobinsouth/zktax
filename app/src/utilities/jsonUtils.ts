@@ -1,8 +1,6 @@
 // Match MAX_JSON_SIZE to circuit files being used.
 // Use small size for github version
-// export const MAX_JSON_SIZE = 25;
 // export const MAX_JSON_SIZE = 100;
-// export const MAX_JSON_SIZE = 1000;
 export const MAX_JSON_SIZE = 1500;
 // export const MAX_JSON_SIZE = 2000;
 
