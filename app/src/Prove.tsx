@@ -311,7 +311,7 @@ function Prove() {
 				) : (
 					<ColumnContainer>
 						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 10, marginTop: 20 }}>
-							Input signed tax data (ZK proof "witness")
+							Input Signed Tax Data (ZK proof "witness")
 						</Text>
 						<JSONDisplay
 							taxData={inputJsonOfEverything}
