@@ -19,7 +19,7 @@ const IGNORE_FIELD = "-";
 // metadata
 const YEAR_KEY = "year";
 const FORMNAME_KEY = "form";
-const METADATA_FIELDS = [YEAR_KEY, FORMNAME_KEY];
+export const METADATA_FIELDS = [YEAR_KEY, FORMNAME_KEY];
 
 export const empty1040src = "/f1040/f1040-2020-empty.pdf";
 
