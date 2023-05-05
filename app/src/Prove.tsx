@@ -253,19 +253,19 @@ function Prove() {
 						<RowContainer>
 							<ColumnContainer style={{ flex: 1, marginRight: 10 }}>
 								<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
-									JSON Form Data
+									Redacted JSON Form Data
 								</Text>
 								<PDFDisplay taxData={redactedJson} style={{ flex: 1, minHeight: 400 }} />
 							</ColumnContainer>
 							<ColumnContainer>
-								<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
-									Tax Data JSON
+								<Text size={fonts.fontM} style={{ fontWeight: "700", marginTop: 20, marginBottom: 5 }}>
+									Redacted Tax Data JSON
 								</Text>
 								<JSONDisplay
 									taxData={redactedJson}
 									default="Add JSON tax data"
 									onChange={() => {}}
-									style={{ flex: 1, minWidth: 400 }}
+									style={{ flex: 1, minWidth: 400, marginBottom: 0, color: pageStyle.textColor }}
 								/>
 							</ColumnContainer>
 						</RowContainer>
