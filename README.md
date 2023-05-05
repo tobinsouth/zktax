@@ -35,4 +35,9 @@ server {
     }
 }
 ```
+
+Every time we edit something to test the deployment, we do it locally, run yarn build locally and put on server. 
+
+e.g. `rsync -azrhP build tsouth@zktax.media.mit.edu:/var/www/html/zktax/build`
+
 Move the react app code into `/var/www/html/reactapp`, run `npm run build`, then `sudo service nginx restart`.
