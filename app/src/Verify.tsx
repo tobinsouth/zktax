@@ -14,11 +14,16 @@ const verifyPageStyle: PageStyle = {
 	buttonColor: "#ADD8E6",
 };
 
-// const verificationKey = "http://localhost:8000/verification_key2000.json";
-const verificationKey = "http://localhost:8000/verification_key1500.json";
-// const verificationKey = "http://localhost:8000/verification_key1000.json";
-// const verificationKey = "http://localhost:8000/verification_key100.json";
-// const verificationKey = "http://localhost:8000/verification_key25.json";
+// The circuit files are compiled for different MAX_JSON_SIZE's 
+// Where larger JSON means a larger circuit, hence larger files. 
+// The large files used for the demo (>= 1500) are not committed to git. 
+// The smaller files are. 
+// Update which file and MAX_JSON_SIZE are used to match.
+// const verificationKey = "/zkproof/verification_key2000.json";
+const verificationKey = "/zkproof/verification_key1500.json";
+// const verificationKey = "/zkproof/verification_key100.json";
+// const verificationKey = "/zkproof/verification_key25.json";
+
 const verifyProof = async (_verificationkey: string, signals: any, proof: any) => {
 	const vkey = await fetch(_verificationkey).then(function (res) {
 		return res.json();
