@@ -1,6 +1,15 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
 import { PageStyle } from "./App";
-import { Button, ColumnContainer, fonts, PageTitle, RestrictWidthContainer, RowContainer, Text } from "./common";
+import {
+	Button,
+	ColumnContainer,
+	Divider,
+	fonts,
+	PageTitle,
+	RestrictWidthContainer,
+	RowContainer,
+	Text,
+} from "./common";
 import "./App.css";
 import { useColor } from "./ColorContext";
 import { signalsArrayToJSON } from "./utilities/jsonUtils";
@@ -105,6 +114,13 @@ const Verify = () => {
 		<ColumnContainer style={{ paddingBottom: 50, backgroundColor: pageStyle.backgroundColor }}>
 			<PageTitle title="Verify" subtitle="Check the legitimacy of a zk proof" />
 			<RestrictWidthContainer>
+				<Text size={fonts.fontS} style={{ marginTop: 20 }}>
+					This verification service is a separate service from the proving service and can be run by anyone
+					once an individual's tax proof has been made public. This service checks that the redacted JSON
+					output was produced from the original private tax records based on the uploaded zero-knowledge proof
+					file, without needed to see the private tax records.
+				</Text>
+				<Divider style={{ marginTop: 50, marginBottom: 30 }} />
 				{showResult ? (
 					<ColumnContainer>
 						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 10, marginTop: 20 }}>
