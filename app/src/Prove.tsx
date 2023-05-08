@@ -257,8 +257,8 @@ function Prove() {
 			<PageTitle title="Redact & Prove" subtitle="Select fields for redaction and generate proof" />
 			<RestrictWidthContainer>
 				<Text size={fonts.fontS} style={{ marginTop: 20 }}>
-					This is a third-party redact service, which could be provided as an open-source tool to take signed
-					tax records, redact sensitive fields, and creates a zero-knowlegde (zk) proof that the redacted tax
+					This service could be provided as an open-source tool or by the Trusted Tax Service. It takes signed
+					tax records, allows redacting sensitive fields, and creates a zero-knowlegde (zk) proof that the redacted tax
 					record comes from the original signed source.
 				</Text>
 				<Text size={fonts.fontS} style={{ marginTop: 20 }}>
@@ -268,7 +268,7 @@ function Prove() {
 					verification.
 				</Text>
 				<Text size={fonts.fontS} style={{ marginTop: 20 }}>
-					This code is capable of running locally through a browser such that users do not need to upload
+					This code runs locally through a browser so users do not upload
 					sensitive tax records to a third-party server.
 				</Text>
 				<Divider style={{ marginTop: 50, marginBottom: 30 }} />

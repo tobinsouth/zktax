@@ -68,9 +68,16 @@ const Home = () => {
 						</Text>
 						<Text size={fonts.fontS} style={{ fontWeight: "500" }}>
 							This service already collects individuals' tax records and is a trusted authority. E.g. the
-							IRS in the United States. This service uses private-public key cryptography to sign
-							individuals' tax data, which individuals can then download as JSON. The Trusted Tax
-							Service's public key is public. The downloaded data is private.
+							IRS in the United States. 
+							<br/>
+							<br/>
+							This service uses private-public key cryptography to sign
+							individuals' tax data, which individuals can then download as JSON. 
+							<br/>
+							The Trusted Tax
+							Service's public key is public. 
+							<br/>
+							The downloaded data is private.
 						</Text>
 						<a href="/sign" style={{ marginTop: "auto", width: "100%" }}>
 							<Button title="Go to Trusted Tax Service" onClick={() => {}} style={{ width: "100%" }} />
@@ -83,11 +90,18 @@ const Home = () => {
 						</Text>
 						<Text size={fonts.fontS} style={{ fontWeight: "500", marginBottom: 15 }}>
 							Users take their downloaded tax data from the Trusted Tax Service to the Redact and Prove
-							Service. The tax data are still private. Users select which tax fields are to be redacted
+							Service. The tax data are still private. 
+							<br/>
+							<br/>
+							Users select which tax fields are to be redacted
 							(e.g. SSN, address, etc). The tax fields selected for redaction are provided as input along
-							with the signed tax data to the zk-snark circuit. The circuit verifies the signature,
-							redacts the data, and outputs a proof with the redacted version of the tax data. The outputs
-							(proof data and redacted tax data) can be made public.
+							with the signed tax data to the zk-snark circuit. 
+							<br/>
+							The circuit verifies the signature,
+							redacts the data, and outputs a proof with the redacted version of the tax data. 
+							<br/>
+							The outputs
+							(proof + redacted tax data) can be made public.
 						</Text>
 						<a href="/sign" style={{ marginTop: "auto", width: "100%" }}>
 							<Button title="Go to Redact & Prove Service" onClick={() => {}} style={{ width: "100%" }} />

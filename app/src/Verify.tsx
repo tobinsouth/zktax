@@ -112,13 +112,13 @@ const Verify = () => {
 
 	return (
 		<ColumnContainer style={{ paddingBottom: 50, backgroundColor: pageStyle.backgroundColor }}>
-			<PageTitle title="Verify" subtitle="Check the legitimacy of a zk proof" />
+			<PageTitle title="Verify" subtitle="" />
 			<RestrictWidthContainer>
 				<Text size={fonts.fontS} style={{ marginTop: 20 }}>
-					This verification service is a separate service from the proving service and can be run by anyone
-					once an individual's tax proof has been made public. This service checks that the redacted JSON
-					output was produced from the original private tax records based on the uploaded zero-knowledge proof
-					file, without needed to see the private tax records.
+					This service is a separate service from the proving service and can be run by anyone
+					once an individual's tax proof has been made public. This service verifies that the redacted JSON
+					output was produced from the original private tax data based on the zero-knowledge proof
+					file, without needing to see the private tax data.
 				</Text>
 				<Divider style={{ marginTop: 50, marginBottom: 30 }} />
 				{showResult ? (
