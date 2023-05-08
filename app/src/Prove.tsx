@@ -14,7 +14,22 @@ import { PageStyle } from "./App";
 import { useColor } from "./ColorContext";
 import JSONDisplay from "./JSONDisplay";
 import PDFDisplay from "./PDFDisplay";
+import { METADATA_FIELDS } from "./utilities/f1040";
 const snarkjs = require("snarkjs");
+
+// The circuit files are compiled for different MAX_JSON_SIZE's 
+// Where larger JSON means a larger circuit, hence larger files. 
+// The large files used for the demo (>= 1500) are not committed to git. 
+// The smaller files are. 
+// Update which file and MAX_JSON_SIZE are used to match.
+// const wasmFile = "/zkproof/circuit25.wasm";
+// const zkeyFile = "/zkproof/circuit25.zkey";
+// const wasmFile = "/zkproof/circuit100.wasm";
+// const zkeyFile = "/zkproof/circuit100.zkey";
+const wasmFile = "/zkproof/circuit1500.wasm";
+const zkeyFile = "/zkproof/circuit1500.zkey";
+// const wasmFile = "/zkproof/circuit2000.wasm";
+// const zkeyFile = "/zkproof/circuit2000.zkey";
 
 const provePageStyle: PageStyle = {
 	backgroundColor: "#161616",
@@ -57,51 +72,55 @@ const RedactTable = (props: { inputJson: any; redactKeys: Array<string>; editRed
 				</Text>
 			</RowContainer>
 			<ColumnContainer style={{ maxHeight: 500, overflow: "scroll" }}>
-				{Object.keys(inputJson).map((key: string, index: any) => {
-					const value = inputJson[key];
-					const checked = redactKeys.includes(key);
-					return (
-						<RowContainer
-							style={{
-								justifyContent: "space-around",
-								paddingTop: 10,
-								paddingBottom: 10,
-								backgroundColor: "#e1e1e1",
-								borderRadius: 5,
-								alignItems: "center",
-								marginTop: index === 0 ? 0 : 8,
-							}}>
-							<RowContainer style={{ width: "33%", justifyContent: "center" }}>
-								<input
-									id="all"
-									type="checkbox"
-									checked={checked}
-									style={{
-										height: 20,
-										width: 20,
-										cursor: "pointer",
-										borderWidth: 2,
-									}}
-									onChange={() => editRedactKey(key)}
-									className="checkbox"
-								/>
-							</RowContainer>
-							<Text size={fonts.fontS} style={{ fontWeight: "300", width: "33%", textAlign: "center" }}>
-								{key}
-							</Text>
-							<Text
-								size={fonts.fontS}
+				{Object.keys(inputJson)
+					.filter((k: string) => !METADATA_FIELDS.includes(k))
+					.map((key: string, index: any) => {
+						const value = inputJson[key];
+						const checked = redactKeys.includes(key);
+						return (
+							<RowContainer
 								style={{
-									fontWeight: "300",
-									width: "33%",
-									textAlign: "center",
-									textDecoration: checked ? "line-through" : "none",
+									justifyContent: "space-around",
+									paddingTop: 10,
+									paddingBottom: 10,
+									backgroundColor: "#e1e1e1",
+									borderRadius: 5,
+									alignItems: "center",
+									marginTop: index === 0 ? 0 : 8,
 								}}>
-								{value}
-							</Text>
-						</RowContainer>
-					);
-				})}
+								<RowContainer style={{ width: "33%", justifyContent: "center" }}>
+									<input
+										id="all"
+										type="checkbox"
+										checked={checked}
+										style={{
+											height: 20,
+											width: 20,
+											cursor: "pointer",
+											borderWidth: 2,
+										}}
+										onChange={() => editRedactKey(key)}
+										className="checkbox"
+									/>
+								</RowContainer>
+								<Text
+									size={fonts.fontS}
+									style={{ fontWeight: "300", width: "33%", textAlign: "center" }}>
+									{key}
+								</Text>
+								<Text
+									size={fonts.fontS}
+									style={{
+										fontWeight: "300",
+										width: "33%",
+										textAlign: "center",
+										textDecoration: checked ? "line-through" : "none",
+									}}>
+									{value}
+								</Text>
+							</RowContainer>
+						);
+					})}
 			</ColumnContainer>
 		</ColumnContainer>
 	);
@@ -129,17 +148,6 @@ function Prove() {
 	useEffect(() => {
 		setShowRedactTable(Object.keys(inputJson).length > 0);
 	}, [inputJson]);
-
-	//let wasmFile = "http://localhost:8000/circuit25.wasm";
-	// let zkeyFile = "http://localhost:8000/circuit25.zkey";
-	// let wasmFile = "http://localhost:8000/circuit100.wasm";
-	// let zkeyFile = "http://localhost:8000/circuit100.zkey";
-	// let wasmFile = "http://localhost:8000/circuit1000.wasm";
-	// let zkeyFile = "http://localhost:8000/circuit1000.zkey";
-	let wasmFile = "http://localhost:8000/circuit1500.wasm";
-	let zkeyFile = "http://localhost:8000/circuit1500.zkey";
-	// let wasmFile = "http://localhost:8000/circuit2000.wasm";
-	// let zkeyFile = "http://localhost:8000/circuit2000.zkey";
 
 	const processInput = () => {
 		try {
@@ -209,8 +217,6 @@ function Prove() {
 		}
 
 		proofInput["redact_map"] = _redactMap;
-		console.log("redact_map");
-		console.log(JSON.stringify(_redactMap));
 		console.log("Proof input", proofInput);
 		console.log(JSON.stringify(proofInput));
 
@@ -222,7 +228,6 @@ function Prove() {
 	};
 
 	useEffect(() => {
-		console.log("Signals", signals);
 		setRedactedJson(signalsArrayToJSON(signals));
 	}, [signals]);
 
@@ -269,6 +274,25 @@ function Prove() {
 				<Divider style={{ marginTop: 50, marginBottom: 30 }} />
 				{proof.length > 0 && signals.length > 0 ? (
 					<ColumnContainer>
+						<RowContainer>
+							<ColumnContainer style={{ flex: 1, marginRight: 10 }}>
+								<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
+									Redacted JSON Form Data
+								</Text>
+								<PDFDisplay taxData={redactedJson} style={{ flex: 1, minHeight: 400 }} />
+							</ColumnContainer>
+							<ColumnContainer>
+								<Text size={fonts.fontM} style={{ fontWeight: "700", marginTop: 20, marginBottom: 5 }}>
+									Redacted Tax Data JSON
+								</Text>
+								<JSONDisplay
+									taxData={redactedJson}
+									default="Add JSON tax data"
+									onChange={() => {}}
+									style={{ flex: 1, minWidth: 400, marginBottom: 0, color: pageStyle.textColor }}
+								/>
+							</ColumnContainer>
+						</RowContainer>
 						<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 10, marginTop: 40 }}>
 							Proof Artifacts
 						</Text>
@@ -291,18 +315,6 @@ function Prove() {
 								</Text>
 								<JSONDisplay
 									taxData={signals}
-									onChange={() => {}}
-									disabled
-									default=""
-									style={{ color: pageStyle.textColor }}
-								/>
-							</ColumnContainer>
-							<ColumnContainer style={{ flex: 1 }}>
-								<Text size={fonts.fontS} style={{ fontWeight: "700", marginBottom: 3 }}>
-									Redacted JSON
-								</Text>
-								<JSONDisplay
-									taxData={redactedJson}
 									onChange={() => {}}
 									disabled
 									default=""

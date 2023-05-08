@@ -242,8 +242,7 @@ const Sign = () => {
 							onChange={() => {}}
 							disabled
 						/>
-
-						<RowContainer style={{ marginTop: 10 }}>
+						<RowContainer>
 							<Button
 								title="Download Signed Tax Data"
 								onClick={handleDownload}
@@ -254,6 +253,25 @@ const Sign = () => {
 								onClick={handleCopyToClipboard}
 								style={{ flex: 1, marginLeft: 5 }}
 							/>
+						</RowContainer>
+						<RowContainer>
+							<ColumnContainer style={{ flex: 1, marginRight: 10 }}>
+								<Text size={fonts.fontM} style={{ fontWeight: "700", marginBottom: 5, marginTop: 20 }}>
+									JSON Form Data
+								</Text>
+								<PDFDisplay taxData={inputJson} style={{ flex: 1, minHeight: 400 }} />
+							</ColumnContainer>
+							<ColumnContainer>
+								<Text size={fonts.fontM} style={{ fontWeight: "700", marginTop: 20, marginBottom: 5 }}>
+									Tax Data JSON
+								</Text>
+								<JSONDisplay
+									taxData={inputJson}
+									default="Add JSON tax data"
+									onChange={setInputJson}
+									style={{ flex: 1, minWidth: 400, marginBottom: 0 }}
+								/>
+							</ColumnContainer>
 						</RowContainer>
 					</ColumnContainer>
 				)}

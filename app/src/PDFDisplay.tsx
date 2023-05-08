@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { PDFDocument } from "pdf-lib";
-import { updatePdfForm } from "./utilities/f1040";
+import { updatePdfForm, emptyf1040 } from "./utilities/f1040";
 import { safelyParseJSON } from "./utilities/jsonUtils";
 
 const PDFDisplay = (props: { taxData: string; style?: any }) => {
@@ -20,7 +20,7 @@ const PDFDisplay = (props: { taxData: string; style?: any }) => {
 	const updateFormState = useCallback(
 		(taxJson: Map<string, string>) => {
 			const func = async () => {
-				const formUrl = "http://localhost:3000/f1040/f1040-2020-empty.pdf";
+				const formUrl = emptyf1040;
 				const formPdfBytes = await fetch(formUrl).then((res) => res.arrayBuffer());
 				const doc = await PDFDocument.load(formPdfBytes);
 				updatePdf(doc);

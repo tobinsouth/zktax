@@ -21,6 +21,10 @@ app/src/zkproof/*1500*
 app/src/zkproof/*2000*
 !app/src/zkproof/circuit*.circom
 !app/src/zkproof/input*.json
+# Do not commit large files that we serve from public/
+app/public/zkproof/*1000*
+app/public/zkproof/*1500*
+app/public/zkproof/*2000*
 
 # dependencies
 /app/node_modules
