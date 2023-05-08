@@ -133,30 +133,25 @@ const Sign = () => {
 				<RestrictWidthContainer>
 					<Text size={fonts.fontS}>
 						This page represents a hypothetical service provided by a trusted tax authority that already
-						collects individuals' tax records. E.g. the IRS in the United States.
+						collects individuals' tax records. For example, the IRS in the United States. This prototype is
+						meant to show that while this service does not currently exist, it could.
 					</Text>
-					<Text size={fonts.fontS}>
-						This prototype is meant to show that while this service does not currently exist, it could.
-					</Text>
-					<Text size={fonts.fontS}>
+					<Text size={fonts.fontS} style={{ marginTop: 20 }}>
 						Tax data are often stored in PDF format, and can be converted into other common formats such as
-						JSON.
+						JSON. This service uses public key cryptography to sign individuals' tax data, which individuals
+						can then download as JSON.
+						<ul style={{ marginTop: 1, marginBottom: 0 }}>
+							<li>The Trusted Tax Service's public key is public</li>
+							<li>The downloaded data is private</li>
+						</ul>
 					</Text>
-					<Text size={fonts.fontS}>
-						This service uses public key cryptography to sign individuals' tax data, which individuals can
-						then download as JSON.
-					</Text>
-					<Text size={fonts.fontS}>The Trusted Tax Service's public key is public.</Text>
-					<Text size={fonts.fontS}>The downloaded data is private.</Text>
-					<br />
-					<Text size={fonts.fontS}>
+					<Text size={fonts.fontS} style={{ marginTop: 20 }}>
 						In this demo, instead of users automatically downloading their tax data, users provide tax data
 						to then be signed and output by the service.
 					</Text>
-					<Text size={fonts.fontS}>
+					<Text size={fonts.fontS} style={{ marginTop: 20, fontWeight: "700" }}>
 						This example uses the 2020 version of US income tax return form 1040.
 					</Text>
-					<br />
 					<Text size={fonts.fontS}>
 						An empty form can be downloaded from the IRS to be filled out and inserted below:
 						<a
@@ -168,7 +163,7 @@ const Sign = () => {
 						</a>
 					</Text>
 					<Text size={fonts.fontS}>
-						Or use this filled out version from a public official who was recently compelled to publish
+						or use this filled out version from a public official who was recently compelled to publish
 						their 2020 form 1040:
 						<a
 							href="/f1040/f1040-2020-trump.pdf"
@@ -178,7 +173,7 @@ const Sign = () => {
 							/f1040/f1040-2020-trump.pdf
 						</a>
 					</Text>
-					<Divider style={{ marginTop: 20 }} />
+					<Divider style={{ marginTop: 50 }} />
 				</RestrictWidthContainer>
 			</RowContainer>
 			<RestrictWidthContainer>

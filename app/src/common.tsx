@@ -61,9 +61,9 @@ export const PageTitle = (props: { title: string; subtitle: string }) => {
 	);
 };
 
-export const RestrictWidthContainer = (props: { children: React.ReactNode | React.ReactNode[] }) => {
+export const RestrictWidthContainer = (props: { children: React.ReactNode | React.ReactNode[]; style?: any }) => {
 	return (
-		<RowContainer style={{ width: "100%", justifyContent: "center" }}>
+		<RowContainer style={{ width: "100%", justifyContent: "center", ...props.style }}>
 			<ColumnContainer style={{ maxWidth: "1200px", flex: 1 }}>{props.children}</ColumnContainer>
 		</RowContainer>
 	);
