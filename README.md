@@ -39,7 +39,7 @@ server {
 }
 ```
 
-Each time there is a change to the code, you can pull and rebuild on the server. In order to build you will have to have the flags `export NODE_OPTIONS=“--max-old-space-size=8192 --openssl-legacy-provider”` set to fix key build issues on the server. 
+Each time there is a change to the code, you can pull and rebuild on the server. In order to build you will have to have the flags `export NODE_OPTIONS="--max-old-space-size=8192 --openssl-legacy-provider"` set to fix key build issues on the server with node version 20 (`nvm use 20`, which must be set each time). 
 
 We can then run:
 ```
