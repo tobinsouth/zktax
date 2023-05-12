@@ -130,7 +130,12 @@ const Home = () => {
 						width: "100%",
 						marginTop: 20,
 					}}></img>
-				{/* TODO: Put nice graphic here */}
+					<br/>
+					<br/>
+				<Text size={fonts.fontS} style={{ fontWeight: "600", marginTop: 20, textAlign: "left" }}>
+					Code:
+				</Text>
+				<a href="" target="_blank">https://github.com/tobinsouth/zktax</a>
 			</RestrictWidthContainer>
 		</ColumnContainer>
 	);
