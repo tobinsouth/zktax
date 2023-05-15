@@ -248,11 +248,13 @@ const Sign = () => {
 								onClick={handleDownload}
 								style={{ flex: 1, marginRight: 5 }}
 							/>
-							<Button
+							<Text size={fonts.fontS}>Or copy above text area directly</Text>
+							{/* TODO: use this button once we have SSL */}
+							{/* <Button
 								title="Copy to Clipboard"
 								onClick={handleCopyToClipboard}
 								style={{ flex: 1, marginLeft: 5 }}
-							/>
+							/> */}
 						</RowContainer>
 						<RowContainer>
 							<ColumnContainer style={{ flex: 1, marginRight: 10 }}>
