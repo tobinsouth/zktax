@@ -67,7 +67,7 @@ const Verify = () => {
 		});
 	};
 
-	const handleProofUpload = (event: ChangeEvent<HTMLInputElement>) => {
+	const handleProof = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files && event.target.files.length > 0) {
 			const file = event.target.files[0];
 			const reader = new FileReader();
@@ -88,7 +88,7 @@ const Verify = () => {
 		}
 	};
 
-	const handleSignalsUpload = (event: ChangeEvent<HTMLInputElement>) => {
+	const handleSignals = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files && event.target.files.length > 0) {
 			const file = event.target.files[0];
 			const reader = new FileReader();
@@ -150,25 +150,25 @@ const Verify = () => {
 						<RowContainer style={{ marginBottom: 5 }}>
 							<ColumnContainer style={{ flex: 1, marginRight: 5 }}>
 								<Text size={fonts.fontXS} style={{ fontWeight: "700", marginBottom: 5 }}>
-									Upload Proof
+									Insert Proof
 								</Text>
 								<input
 									type="file"
-									id="proof-upload"
+									id="proof-file"
 									accept=".json"
-									onChange={handleProofUpload}
+									onChange={handleProof}
 									style={{ backgroundColor: pageStyle.altBackgroundColor }}
 								/>
 							</ColumnContainer>
 							<ColumnContainer style={{ flex: 1, marginLeft: 5 }}>
 								<Text size={fonts.fontXS} style={{ fontWeight: "700", marginBottom: 5 }}>
-									Upload Signals
+									Insert Signals
 								</Text>
 								<input
 									type="file"
-									id="signals-upload"
+									id="signals-file"
 									accept=".json"
-									onChange={handleSignalsUpload}
+									onChange={handleSignals}
 									style={{ backgroundColor: pageStyle.altBackgroundColor }}
 								/>
 							</ColumnContainer>
