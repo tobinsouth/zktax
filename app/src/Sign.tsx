@@ -248,7 +248,9 @@ const Sign = () => {
 								onClick={handleDownload}
 								style={{ flex: 1, marginRight: 5 }}
 							/>
-							<Text size={fonts.fontS}>Or copy above text area directly</Text>
+							<Text size={fonts.fontS} style={{ alignSelf: "center", fontWeight: "700" }}>
+								Or copy above text area directly
+							</Text>
 							{/* TODO: use this button once we have SSL */}
 							{/* <Button
 								title="Copy to Clipboard"
