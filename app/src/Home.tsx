@@ -135,7 +135,7 @@ const Home = () => {
 				<Text size={fonts.fontS} style={{ fontWeight: "600", marginTop: 20, textAlign: "left" }}>
 					Code:
 				</Text>
-				<a href="" target="_blank">https://github.com/tobinsouth/zktax</a>
+				<a href="https://github.com/tobinsouth/zktax" target="_blank">https://github.com/tobinsouth/zktax</a>
 			</RestrictWidthContainer>
 		</ColumnContainer>
 	);
