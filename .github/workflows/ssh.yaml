@@ -16,7 +16,7 @@ jobs:
                   node-version: "20.0.0"
                   cache: "yarn"
                   cache-dependency-path: "app/yarn.lock"
-            - run: yarn build:app
+            - run: export SET NODE_OPTIONS=--openssl-legacy-provider && yarn build:app
             - name: Copy folder content recursively to server
               uses: garygrossgarten/github-action-scp@release
               with:
