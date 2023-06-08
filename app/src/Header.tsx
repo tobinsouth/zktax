@@ -17,7 +17,7 @@ const Header = () => {
 						<Text
 							size={fonts.fontML}
 							style={{ color: pageStyle.textColor, fontWeight: "600", cursor: "pointer" }}>
-							zkTaxes
+							zktax
 						</Text>
 					</Link>
 				</LeftContainer>
