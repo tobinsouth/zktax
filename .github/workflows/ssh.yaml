@@ -15,6 +15,7 @@ jobs:
               with:
                   node-version: "20.0.0"
                   cache: "yarn"
+                  working-directory: app
             - run: yarn build:app
               working-directory: app
             - name: Copy folder content recursively to server
