@@ -11,7 +11,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2
             - name: Check secret
-              run: echo "The length of the SSH_HOST secret is ${#SSH_HOST}"
+              run: echo "The SSH_HOST secret is ${#SSH_HOST}"
               env:
                   SSH_HOST: '${{ secrets.SSH_HOST }}'
             - name: Use Node.js 20
