@@ -22,7 +22,7 @@ jobs:
               with:
                   local: app/build
                   remote: /var/www/html/zktax/build
-                  host: ${{ secrets.SSH_HOST }}
-                  username: ${{ secrets.SSH_USER }}
-                  password: ${{ secrets.SSH_PASSWORD }}
+                  host: '${{ secrets.SSH_HOST }}'
+                  username: '${{ secrets.SSH_USER }}'
+                  password: '${{ secrets.SSH_PASSWORD }}'
                   rmRemote: true
