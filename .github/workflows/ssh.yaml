@@ -10,6 +10,10 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v2
+            - name: Check secret
+              run: echo "The SSH_HOST secret is ${#SSH_HOST}"
+              env:
+                  SSH_HOST: '${{ secrets.SSH_HOST }}'
             - name: Use Node.js 20
               uses: actions/setup-node@v2
               with:
@@ -22,7 +26,7 @@ jobs:
               with:
                   local: app/build
                   remote: /var/www/html/zktax/build
-                  host: ${{ secrets.SSH_HOST }}
-                  username: ${{ secrets.SSH_USER }}
-                  password: ${{ secrets.SSH_PASSWORD }}
+                  host: '${{ secrets.SSH_HOST }}'
+                  username: '${{ secrets.SSH_USER }}'
+                  password: '${{ secrets.SSH_PASSWORD }}'
                   rmRemote: true
