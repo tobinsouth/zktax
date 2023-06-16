@@ -248,15 +248,15 @@ const Sign = () => {
 								onClick={handleDownload}
 								style={{ flex: 1, marginRight: 5 }}
 							/>
-							<Text size={fonts.fontS} style={{ alignSelf: "center", fontWeight: "700" }}>
+							{/* The copy to clipboard button only works on localhost or with SSL */}
+							{/* <Text size={fonts.fontS} style={{ alignSelf: "center", fontWeight: "700" }}>
 								Or copy above text area directly
-							</Text>
-							{/* TODO: use this button once we have SSL */}
-							{/* <Button
+							</Text> */}
+							<Button
 								title="Copy to Clipboard"
 								onClick={handleCopyToClipboard}
 								style={{ flex: 1, marginLeft: 5 }}
-							/> */}
+							/>
 						</RowContainer>
 						<RowContainer>
 							<ColumnContainer style={{ flex: 1, marginRight: 10 }}>
