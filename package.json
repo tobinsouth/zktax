@@ -1,5 +1,0 @@
-{
-	"scripts": {
-		"build:app": "cd app && yarn install && yarn run build"
-	}
-}
